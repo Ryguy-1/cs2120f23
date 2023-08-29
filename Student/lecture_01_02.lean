@@ -187,8 +187,20 @@ function types and answer the following questions.
 Questions:
 - Which two types are equivalent?
 - Are #1 and #3 equivalent?
+    - #2 and #3 are equivalent
 - Give English explanations of these function types
+    - 1) takes function that takes string and returns string and returns string
+    - 2) takes string and returns a function that takes a string and returns a string
+    - 3) ""
 - Give some examples of functions of these types
+    - 1) a function that takes in the String.append function 
+            with one variable already saved to it and returns 
+            a String
+        - ex: you pass in (String.append 'first ') and the
+            the function adds 'second' to it
+    - 2/3) a function that takes in a string and returns
+            a function that takes a string and returns a string
+        - ex: String.append!
 -/
 
 /-
@@ -202,10 +214,10 @@ so f1 can be used as a valid first argument to crazy.
 
 def crazy (f : String → String) (a : String) : String := (f a) 
 #eval crazy f1 s1
-
 /-
 Question: What is the type of the crazy function? Be
 careful. 
+    answer: string -> string -> string -> string
 -/
 
 /-
@@ -237,7 +249,6 @@ Answer before using Lean to compute it for you. Recall that
 f1 is a function as defined above and s2 is the string, "Lean!".
 -/
 #eval crazy2 f1 s2    
-
 /-
 Let's now turn to the question of how to define our own
 functions. To provide motivation, we'll observe that Lean
@@ -306,10 +317,10 @@ Self-test: Fill in the correct output values for this function.
 -/
 
 def nand : Bool -> Bool -> Bool
-| true, true => _
-| true, false => _
-| false, true => _
-| false, false => _
+| true, true => false
+| true, false => true
+| false, true => true
+| false, false => true
 
 /-
 Self-test: Complete this definition of the
@@ -319,7 +330,10 @@ each case.
 -/
 
 def nor : Bool -> Bool -> Bool
-:= _  -- delete this line and fill in the four cases
+| true, true => false
+| true, false => false
+| false, true => false
+| false, false => true
 
 /-
 Self-test. Suppose that a function takes two
