@@ -1,3 +1,20 @@
+# Ryland Notes
+To Pull from Origin and Merge
+1. Check Upstream Origin Exists
+    ```
+    git remote -v
+    ```
+   - If upstream Not Exist
+     ```
+     git remote add upstream https://github.com/kevinsullivan/cs2120f23
+     ```
+2. Pull from Upstream
+    ```
+    git pull upstream main
+    ```
+
+
+
 # CS2120 Fall 2023 Section 002 (Sullivan)
 
 Welcome to UVa CS2120 Fall 2022. Here are the instructions for setting up your logic and proof systems for this semester. 
