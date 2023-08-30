@@ -239,6 +239,7 @@ so f1 can be used as a valid first argument to crazy.
 
 def crazy (f : String → String) (a : String) : String := (f a) 
 #eval crazy f1 s1
+#check crazy
 /-
 Question: What is the type of the crazy function? Be
 careful. 
@@ -273,7 +274,7 @@ Self test: What does the following expression evaluate to?
 Answer before using Lean to compute it for you. Recall that
 f1 is a function as defined above and s2 is the string, "Lean!".
 -/
-#eval crazy2 f1 s2    
+#eval crazy2 f1 s2
 /-
 Let's now turn to the question of how to define our own
 functions. To provide motivation, we'll observe that Lean
@@ -475,3 +476,14 @@ plausible, interpretation of the snack policy that the Dad
 was communicating to his daughter? (You can have either one
 or neither but not both)?
 -/
+
+def dad_func : Bool -> Bool -> Bool
+| true, true => false
+| a, b => true
+
+def dad_func_2 : Bool -> Bool -> Bool
+| a, b => not (and a b)
+
+def dad_func_3 (a : Bool) (b : Bool) : Bool := not (and a b)
+
+#eval dad_func_3 false false
