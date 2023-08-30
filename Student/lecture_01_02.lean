@@ -143,7 +143,7 @@ it actually works! Recall that s1 here is the string,
 "Hello, ".
 -/
 def f1 := String.append s1
-#check (f1)      
+#check (f1)
 
 /-
 Whoa, so f1 is a some function that takes just one
@@ -175,6 +175,8 @@ def add2 := Nat.add 2
 #eval add2 15
 
 
+def add10 := Nat.add 10
+#eval add10 4
 /-
 To see if you've gotten it, consider these three
 function types and answer the following questions.
@@ -182,6 +184,29 @@ function types and answer the following questions.
 #check (String → String) → String   -- #1
 #check String → (String → String)   -- #2
 #check String → String → String     -- #3
+
+def func_1 (f : String -> String) (a : String) : String := (f a)
+def func_2 : (String -> String) -> String -> String
+| f, "hello" => f "goodbye"
+| f, a => f a
+
+
+def app := String.append "WOWOW, "
+#eval func_2 app "hello"
+#eval func_2 app "asdf"
+
+
+def something_hello (f : String -> String) : String := f "hello"
+
+def appending := String.append "yoyo "
+
+#eval something_hello appending
+
+
+def ffff : String -> String -> String
+| f, a => String.append f a
+
+#eval ffff "asdf" " 3ee"
 
 /-
 Questions:
