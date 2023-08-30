@@ -10,7 +10,7 @@ To Pull from Origin and Merge
      ```
 2. Pull from Upstream
     ```
-    git pull upstream main
+    git pull --rebase upstream main
     ```
 
 
