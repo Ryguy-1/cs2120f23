@@ -243,7 +243,7 @@ def crazy (f : String → String) (a : String) : String := (f a)
 /-
 Question: What is the type of the crazy function? Be
 careful. 
-    answer: string -> string -> string -> string
+    answer: (string -> string) -> string -> string
 -/
 
 /-
@@ -479,7 +479,7 @@ or neither but not both)?
 
 def dad_func : Bool -> Bool -> Bool
 | true, true => false
-| a, b => true
+| _, _ => true
 
 def dad_func_2 : Bool -> Bool -> Bool
 | a, b => not (and a b)
