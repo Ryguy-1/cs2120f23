@@ -1,6 +1,9 @@
 /-!
 # Homework #2
 
+# Name: Ryland Birchmeier
+# Computing ID: zbp6dw
+
 ## Procedure
 
 Here's how to do this homework.
