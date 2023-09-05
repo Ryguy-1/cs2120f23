@@ -202,6 +202,10 @@ of the type arguments are implicit and inferred.
 def glue_funs : {α β γ : Type} -> (β -> γ) -> (α -> β) -> α -> γ
 | _, _, _, g, f, s => g (f s)
 
+-- ADDED AFTER SUBMIT: (OTHER OPTION PUT BEFORE COLON)
+def glue_funs_better {α β γ : Type} : (β -> γ) -> (α -> β) -> α -> γ
+| g, f, s => g (f s)
+
 -- test cases
 #eval glue_funs isEven String.length "Hello"  -- false
 #eval glue_funs isEven String.length "Hello!" -- true
