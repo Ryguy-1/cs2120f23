@@ -176,7 +176,6 @@ of compose' reads better: it takes two functions, of types
 (β → γ) and (α → β), and returns a function of type (α → γ). 
 That's it!
 -/
-
 def compose' {α β γ : Type} :
   (β → γ) →
   (α → β) → 
@@ -248,7 +247,6 @@ def fun_square := fun (n : Nat) => n ^ 2
 
 -- Here we pass an unnamed function to composee
 #eval compose (fun (n : Nat) => n%2 == 0) String.length "Love!"
-
 
 /-!
 In Lean4, the *compose* function is *Function.compose*
