@@ -192,7 +192,8 @@ otherwise.
 
 -- Answer here.
 
-def is_even_len := compose' is_even String.length
+-- def is_even_len := compose' is_even String.length
+def is_even_len := (fun a => a % 2 == 0) ∘ String.length
 #check is_even_len
 
 #eval is_even_len "Love"    -- Expect true
