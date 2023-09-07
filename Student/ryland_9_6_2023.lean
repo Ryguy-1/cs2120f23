@@ -16,3 +16,28 @@ def composed_function := (λ a => a % 2 == 0) ∘ (fun a => a + 3)
 #check composed_function
 
 #eval composed_function 3
+
+def compose' {α β γ : Type} :
+(β → γ) → 
+(α → β) →
+(α → γ)
+|g, f => λ a => g (f a)
+
+def asdf := compose' is_even String.length
+def qwer := not ∘ is_even ∘ String.length
+
+#check asdf
+#eval asdf "sdfds"
+
+#eval qwer "ddd"
+
+
+def two_lambda := (fun (a : Nat) (b : Nat) => a + b)
+
+#eval two_lambda 3 5
+
+def order : Bool -> (Bool -> Bool)
+| _, false => true
+| _, _ => false
+
+#check order true
