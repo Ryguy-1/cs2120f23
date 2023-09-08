@@ -40,7 +40,7 @@ def mkop : {α β : Type} → (a : α) → (b : β) → α × β
 
 -- Ryland Check
 def prod_ex_0 := mkop "hello" 3
-#check prod_ex_0 -- String ⨯ Nat
+#check prod_ex_0 -- String × Nat
 #eval prod_ex_0 -- ("hello", 3)
 
 /-! 
@@ -162,13 +162,19 @@ Consider the outputs of the following #check commands.
 /-!
 Is × left associative or right associative?
 
-Answer here: 
+Answer here: right associative
 
 Define a function, *triple*, of the following type:
 { α β γ : Type } → α → β → γ → (α × β × γ)  
 -/
 
 -- Here:
+def triple : { α β γ : Type } → α → β → γ → (α × β × γ)
+| _, _, _, a, b, c => (a, b, c)
+
+def finish_triple := triple "one" 2 "three"
+#eval finish_triple
+#check finish_triple
 
 /-!
 Define three functions, call them *first*, *second*, 
@@ -177,7 +183,13 @@ an argument and that returns, respectively, it first,
 second, and third elements.
 -/
 
--- Here:
+-- Here: 
+def first { α β γ : Type } : (α × β × γ) -> α
+| (α, _, _) => α
+def second { α β γ : Type } : (α × β × γ) -> β
+| (_, β, _) => β
+def third { α β γ : Type } : (α × β × γ) -> γ
+| (_, _, γ) => γ
 
 /-!
 Write three test cases using #eval to show that when 
@@ -187,12 +199,14 @@ element of that triple.
 -/
 
 -- Here:
+def testObject := triple 1 "test2" "threeeee"
+#eval first testObject
+#eval second testObject
+#eval third testObject
 
 /-!
 Use #check to check the type of a term (that you can
 make up) of type (Nat × String) × Bool. 
 -/
 
-
-
-
+#check ((3, "hello"), true)
