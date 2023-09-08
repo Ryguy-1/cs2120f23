@@ -1,5 +1,6 @@
 /-!
 # Homework #3
+## Ryland Birchmeier - Computing ID: zbp6dw
 
 Near final DRAFT. 
 
@@ -22,7 +23,7 @@ a result.
 def funkom : {α β γ : Type} → (β → γ) → (α → β) → (α → γ)
 | _, _, _, g, f => (λ a => g (f a))
 
--- My Check (it is just the compose function)
+-- Ryland Check
 #eval funkom (fun a => a%2==0) String.length "sdaf" --true
 #eval funkom (fun a => a%2==0) String.length "sdafd" --false
 
@@ -34,8 +35,13 @@ Define a function of the following polymorphic type:
 -/
 
 -- Answer below
+def mkop : {α β : Type} → (a : α) → (b : β) → α × β
+| _, _, a, b => (a, b)
 
-
+-- Ryland Check
+def prod_ex_0 := mkop "hello" 3
+#check prod_ex_0 -- String ⨯ Nat
+#eval prod_ex_0 -- ("hello", 3)
 
 /-! 
 ## Problem #3
@@ -45,9 +51,11 @@ Define a function of the following polymorphic type:
 -/
 
 -- Answer below
+def op_left : {α β : Type} → α × β → α
+| _, _, p => p.fst
 
-
-
+-- Ryland Check
+#eval op_left prod_ex_0 --hello
 
 /-! 
 ## Problem #4
@@ -57,41 +65,89 @@ Define a function of the following polymorphic type:
 -/
 
 -- Answer below
+def op_right : {α β : Type} → α × β → β
+| _, _, p => p.snd
 
-
+-- Ryland Check
+#eval op_right prod_ex_0 --3
 
 /-! #5
 ## Problem #5
 
 Define a data type called *Day*, the values of which
 are the names of the seven days of the week: *sunday,
-monday, etc. 
+monday, etc. -Done
 
 Some days are work days and some days are play
 days. Define a data type, *kind*, with two values,
-*work* and *play*.
+*work* and *play*. -Done
 
 Now define a function, *day2kind*, that takes a *day*
 as an argument and returns the *kind* of day it is as
 a result. Specify *day2kind* so that weekdays (monday
 through friday) are *work* days and weekend days are
-*play* days.
+*play* days. -Done
 
 Next, define a data type, *reward*, with two values,
-*money* and *health*.
+*money* and *health*. -Done
 
 Now define a function, *kind2reward*, from *kind* to 
 *reward* where *reward work* is *money* and *reward play* 
-is *health*.
+is *health*. -Done
 
 Finally, use your *funkom* function to produce a new
 function that takes a day and returns the corresponding
-reward. Call it *day2reward*.
+reward. Call it *day2reward*. -Done
 
 Include test cases using #reduce to show that the reward
 from each weekday is *money* and the reward from a weekend
-day is *health*.
+day is *health*. -Done
 -/
+namespace DayKind
+
+inductive Day : Type
+| sunday
+| monday
+| tuesday
+| wednesday
+| thursday
+| friday
+| saturday
+
+inductive kind : Type
+| work
+| play
+
+open Day
+open kind
+
+def day2kind : Day -> kind
+| saturday => play
+| sunday => play
+| _ => work
+
+inductive reward : Type
+| money
+| health
+
+open reward
+
+def kind2reward : kind -> reward
+| work => money
+| play => health
+
+def day2reward : Day -> reward
+| d => funkom kind2reward day2kind d
+
+#reduce day2reward saturday
+#reduce day2reward sunday
+#reduce day2reward monday
+#reduce day2reward tuesday
+#reduce day2reward wednesday
+#reduce day2reward thursday
+#reduce day2reward friday
+
+end DayKind
 
 /-!
 Problem #6
