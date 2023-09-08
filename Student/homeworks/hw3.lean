@@ -139,13 +139,13 @@ def kind2reward : kind -> reward
 def day2reward : Day -> reward
 | d => funkom kind2reward day2kind d
 
-#reduce day2reward saturday
-#reduce day2reward sunday
-#reduce day2reward monday
-#reduce day2reward tuesday
-#reduce day2reward wednesday
-#reduce day2reward thursday
-#reduce day2reward friday
+#reduce day2reward saturday   -- health
+#reduce day2reward sunday     -- health
+#reduce day2reward monday     -- money
+#reduce day2reward tuesday    -- money
+#reduce day2reward wednesday  -- money
+#reduce day2reward thursday   -- money
+#reduce day2reward friday     -- money
 
 end DayKind
 
@@ -172,9 +172,10 @@ Define a function, *triple*, of the following type:
 def triple : { α β γ : Type } → α → β → γ → (α × β × γ)
 | _, _, _, a, b, c => (a, b, c)
 
+-- Ryland Check
 def finish_triple := triple "one" 2 "three"
-#eval finish_triple
-#check finish_triple
+#eval finish_triple   -- ("one", 2, "three")
+#check finish_triple  -- String × Nat × String
 
 /-!
 Define three functions, call them *first*, *second*, 
@@ -200,13 +201,13 @@ element of that triple.
 
 -- Here:
 def testObject := triple 1 "test2" "threeeee"
-#eval first testObject
-#eval second testObject
-#eval third testObject
+#eval first testObject -- 1
+#eval second testObject -- test2
+#eval third testObject -- threeeee
 
 /-!
 Use #check to check the type of a term (that you can
 make up) of type (Nat × String) × Bool. 
 -/
 
-#check ((3, "hello"), true)
+#check ((3, "hello"), true) -- (Nat × String) × Bool
