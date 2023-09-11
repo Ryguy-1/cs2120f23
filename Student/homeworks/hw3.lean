@@ -89,7 +89,7 @@ def op_right : {α β : Type} → α × β → β
 
 Define a data type called *Day*, the values of which
 are the names of the seven days of the week: *sunday,
-monday,* etc. 
+monday,* etc.       -DONE
 
 Some days are work days and some days are play
 days. Define a data type, *kind*, with two values,
