@@ -267,6 +267,9 @@ def elim_sum {α β γ : Type} : (Sum α β) → (α → γ) → (β → γ) →
 | (Sum.inl a), α2γ, _ => α2γ a  
 | (Sum.inr b), _, β2γ => β2γ b 
 
+-- Ryland: We reviewed compose as well
+#check {α β γ : Type} -> (α -> β) -> (β -> γ) -> (α -> γ)
+
 #eval elim_sum a_sum1 nat_to_string bool_to_string
 #eval elim_sum b_sum1 nat_to_string bool_to_string
 
