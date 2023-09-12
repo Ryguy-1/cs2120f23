@@ -342,6 +342,9 @@ namespace cs2120
 inductive Prod (α β : Type) : Type
 | pair (a : α) (b : β)
 
+inductive Prod3 (α β γ: Type) : Type
+| trio (a : α) (b : β) (c : γ)
+
 open Prod 
 
 /-!
@@ -354,14 +357,17 @@ some timeto internalize this structure.
 
 -- Here's the type of the constructor including implicit arguments
 #check (@pair)
+#check Prod3.trio
 
 -- Here we build two ordered pair values
 def a_pair_string_nat : Prod String Nat := pair "Love" 4
 def a_pair_nat_bool : Prod Nat Bool := pair 5 false
+def three_pair : Prod3 Nat Nat Bool := Prod3.trio 3 4 true
 
 -- These objects are of the "parameterized" types you expect
 #check a_pair_string_nat    -- type of ("Love",5) is (Prod String Nat)
 #check a_pair_nat_bool      -- type of (5, false) is (Prod Nat Bool)
+#check three_pair
 
 /-!
 ### Eliminators
@@ -381,6 +387,9 @@ def first {α β : Type} : Prod α β → α
 def second {α β : Type} : Prod α β → β 
 | (pair _ b) => b
 
+def third {α β γ : Type} : Prod3 α β γ → γ
+| (Prod3.trio _ _ γ) => γ
+
 /-!
 Study, compare, and contrast the function types here
 as well as the implementations. These rules say, first,
@@ -397,6 +406,7 @@ are a few examples of computing with these definitions.
 #eval second a_pair_string_nat    -- 4
 #eval first a_pair_nat_bool       -- 5
 #eval second a_pair_nat_bool      -- false
+#eval third three_pair
 
 /-!
 Challenge: What is the type of Prod? Think hard
