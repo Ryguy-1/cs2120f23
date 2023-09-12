@@ -198,6 +198,8 @@ case*.
 Here's a concrete example. 
 -/
 
+-- Ryland Notes: Must know result in both cases for sum type
+--  have to handle all cases (both cases)
 def elim_sum1 : Sum Nat Bool → String
 | (Sum.inl _) => "It's a Nat" 
 | (Sum.inr _) => "It's a Bool"
@@ -210,13 +212,18 @@ that converts and Bool to a string. Here's what
 that looks like. 
 -/
 
+-- Ryland: if know that from a nat or a bool you can get a string, you can always get a string from a nat or a bool
 def elim_sum2 : 
   (Sum Nat Bool) → 
-  (Nat → String) → 
-  (Bool → String) → 
+  (Nat → String) → -- handle nats to strings
+  (Bool → String) →  -- handle bools to strings
   String
-| (Sum.inl n), n2s, _ => n2s n
-| (Sum.inr b), _, b2s => b2s b
+| (Sum.inl n), n2s, _ => n2s n -- if built with nat, convert with first arg
+| (Sum.inr b), _, b2s => b2s b -- if built with bool, convert with second arg
+
+#check elim_sum2
+#eval elim_sum2 (Sum.inl 23) (λ (_ : Nat) => "Nat") (fun _ => "Bool") -- "Nat"
+#eval elim_sum2 (Sum.inr true) (fun (_ : Nat) => "Nat") (λ _ => "Bool") -- "Bool"
 
 /-!
 Let's analyze that. It takes arguments as expected,
@@ -254,6 +261,8 @@ whether a given *s* will contain an *α* or a *β* value,
 but it can handle *either case*. 
 -/
 
+-- Ryland: Generalized rule for reasoning with sum types
+-- using a value of sum type with 2 functions to get guarenteed result in either case
 def elim_sum {α β γ : Type} : (Sum α β) → (α → γ) → (β → γ) → γ
 | (Sum.inl a), α2γ, _ => α2γ a  
 | (Sum.inr b), _, β2γ => β2γ b 
@@ -261,6 +270,7 @@ def elim_sum {α β γ : Type} : (Sum α β) → (α → γ) → (β → γ) →
 #eval elim_sum a_sum1 nat_to_string bool_to_string
 #eval elim_sum b_sum1 nat_to_string bool_to_string
 
+-- REACHED HERE!
 /-!
 ### Sum Types in Everyday Programming
 
