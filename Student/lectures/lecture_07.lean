@@ -89,7 +89,7 @@ do this, and we might as well make it polymorphic.
 -/
 
 def get {α : Type}: Box α → α 
-| (Box.put s) => s 
+| (Box.put s) => s -- just pattern matches
 
 #eval get (Box.put "Jack!")
 -- Ryland -> Makse sense!
@@ -106,7 +106,7 @@ to use ordered pair notation for that.
 end cs2120
 
 #check (Prod Nat Bool)  -- a type
-#check (Prod.mk 3 true) -- a value (term)
+#check (Prod.mk 3 true) -- Prod Nat Bool
 #check (3, true)        -- outfix notation
 
 -- aka *projection functions*
@@ -131,15 +131,20 @@ Here are the key ideas:
 namespace cs2120
 
 inductive Sum (α β : Type) : Type
-| inl (a : α)
-| inr (b : β)
+| inl (a : α) -- introduce left
+| inr (b : β) -- introduce right
 
 /-!
 ### Constructors
 -/
 
+-- Ryland: Know you have one XOR the other
 def a_sum1 : Sum Nat Bool := Sum.inl 1
 def b_sum1 : Sum Nat Bool := Sum.inr true
+#check a_sum1 -- Sum Nat Bool
+#check b_sum1 -- Sum Nat Bool
+#check @Sum.inl Nat Bool 1 -- Sum Nat Bool
+
 
 /-!
 These definitions assign (1) to *a_sum1* a 
@@ -159,6 +164,8 @@ than of type Sum Nat Bool.
 
 def a_sum2 : Sum Nat String := Sum.inl 1
 
+
+-- Got to here 
 /-!
 ### Eliminator
 
