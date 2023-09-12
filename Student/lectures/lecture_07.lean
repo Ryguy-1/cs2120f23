@@ -32,13 +32,18 @@ namespace cs2120
 
 inductive Box (α : Type) : Type
 | put (a : α)
+#check @Box.put -- same as #check Box.put
+#check @Box.put String "Hello" -- Box String
+#check Box.put "hello" -- Box String
+#check @Box.put Nat -- Nat -> Box Nat
+
 
 /-! 
 Here we've renamed the constructor from pair to 
 mk to be consistent with Lean's built-in definition
 of the Prod type builder.
 -/
-inductive Prod (α : Type) (β : Type)
+inductive Prod (α : Type) (β : Type) -- inferred ": Type"
 | mk (a : α) (b : β)  
 
 /-!
@@ -51,6 +56,7 @@ full type of *put* using *@*.
 
 #check (@Box.put)
 def jack_in_a_box := @Box.put String "Jack!"
+#check jack_in_a_box
 
 /-!
 Leaving implicit arguments enabled, we can leave out 
@@ -86,6 +92,7 @@ def get {α : Type}: Box α → α
 | (Box.put s) => s 
 
 #eval get (Box.put "Jack!")
+-- Ryland -> Makse sense!
 
 /-!
 The *Prod* type builder is analogous except it puts
