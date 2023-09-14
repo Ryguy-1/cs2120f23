@@ -84,6 +84,14 @@ def op_right : {α β : Type} → α × β → β
 -- Ryland Check
 #eval op_right prod_ex_0 --3
 
+-- Ryland After Turn In Notes
+def op_right' : {α β : Type} → α × β → β
+| _, _, p => match p with | (_, b) => b
+
+def op_right'' : {α β : Type} → α × β → β
+| _, _, (_, b) => b
+-- Finish After Turn In Notes
+
 /-! 
 ## Problem #5
 
