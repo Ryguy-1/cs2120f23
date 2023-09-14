@@ -36,6 +36,7 @@ is a type with one constant (parameterless) constructor,
 
 namespace cs2120
 
+-- Ryland: Similar to Java 'void' type -> gives no information just one thing only
 inductive Unit : Type
 | unit
 
@@ -49,7 +50,7 @@ how you can define a notational shorthand for Unit.unit.
 
 notation "()" => Unit.unit
 
-#check ()
+#check () -- This is unit type shorthand
 
 
 /-!
@@ -68,8 +69,16 @@ type *Nat* you give as an argument. The return value
 tells you *nothing* (other than that the function ran). 
 -/
 
-def useless : Nat → Unit := fun _ => ()
+-- Ryland: just returns same type regardless of input (this is entirely useless)
+def useless : Nat → Unit := fun _ => () 
 #reduce useless 0   -- returns (), void
+
+
+-- Ryland: functions that return Unit type must have side effects to be 
+--  useful at all. Functional programming languages have no side effects though!
+--  ex: Java void function has side effects even though void, so is useful
+--    ex: print line or update member variable, etc.
+
 
 /-!
 You can of course also pass a value of the Unit type 
@@ -177,7 +186,7 @@ of this type (a type with no values at all).
 
 namespace cs2120
 
-inductive Empty
+inductive Empty -- Ryland: defining empty type -> no constructors
 
 /-!
 That it: no constructors, no values. Voila, the Empty type. 
@@ -199,8 +208,8 @@ or both.
 ### Nat → Empty
 -/
 
-def nat2empty : Nat → Empty 
-| n => _      
+def nat2empty : Nat → Empty  -- Type false -> cannot be implemented -> true does not imply false (true implies false = false)
+| n => _      -- Ryland: Impossible! NO constructor -> impossible function return empty
 
 /-!
 There's no way to construct a value of type Empty,
@@ -242,8 +251,8 @@ understand the new construct introduced in the following
 code. 
 -/
 
-def empty2nat : Empty → Nat 
-| e => nomatch e
+def empty2nat : Empty → Nat -- Ryland: you can't even call this though of course
+| e => nomatch e -- Ryland: no possible way to match (get out of jail free)
 
 -- Just another way to write the same code
 def empty2nat' (e : Empty) : Nat := 
