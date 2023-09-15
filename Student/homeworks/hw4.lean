@@ -31,6 +31,7 @@ more. You can work with the examples in the notes in
 VSCode by opening the corresponding files. Don't be 
 afraid to "play around" with the examples in VSCode. 
 Doing to will really solidify your understanding. 
+- Ryland: Done
 -/
 
 /-!
@@ -47,11 +48,14 @@ and return a value of type β × α? Prove that the
 answer is yes by writing a function that takes any 
 value of type α × β value and that returns a value 
 of type β × α. Call your function prod_comm.
+- Ryland: Done
 -/
 
 def prod_comm { α β : Type } : α × β → β × α
-| _ => _
+| (a, b) => (b, a)
 
+-- Check
+#eval prod_comm (3, "true") -- ("true", 3)
 /-!
 Is the transformation from *α × β* to *β × α*
 reversible? That is, given types *α* and *β* (in
@@ -59,9 +63,15 @@ that order), then if you have any term of type
 *β × α*, can you always convert it into a term 
 of type *α × β*? Prove it by defining a function 
 of the appropriate type. Call it prod_com_reverse.
+- Ryland: Done
 -/
 
 -- Here:
+def prod_com_reverse { α β : Type } : β × α → α × β
+| (b, a) => (a, b)
+
+-- Check
+#eval prod_com_reverse ("true", 3) -- (3, "true")
 
 /-! 
 ## #3: Associativity of Prod
