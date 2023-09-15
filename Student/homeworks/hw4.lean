@@ -1,5 +1,7 @@
 /-!
 # Homework #4
+## Name: Ryland Birchmeier
+## Computing ID: zbp6dw
 
 The PURPOSE of this homework is to greatly strengthen 
 your understanding of the construction and use of the 
