@@ -93,20 +93,30 @@ Call it prod_assoc. We declare the type parameters
 before the colon in our skeleton definition so that 
 you don't have to match on them. Hint: You can use 
 ordered pair notation to match the input value.
+- Ryland: Done
 -/
 
 -- Here 
-
 def prod_assoc { α β γ : Type} :  α × (β × γ) → (α × β) × γ
-| _ => _
+| (a, (b, c)) => ((a, b), c)
 
+-- Check
+#eval prod_assoc ("bread", ("cheese", "jam")) -- (("bread", "cheese"), "jam")
 /-!
 Prove that the conversion works in the reverse direction
 as well, from *(α × β) × γ* to *α × (β × γ)* by defining
 a function, *prod_assoc_reverse* accordingly.
+- Ryland: Done
 -/
 
 -- Here:
+def prod_assoc_reverse { α β γ : Type} :  (α × β) × γ → α × (β × γ)
+| ((a, b), c) => (a, (b, c))
+
+
+-- Check
+#eval prod_assoc_reverse (("bread", "cheese"), "jam") -- ("bread", "cheese", "jam")
+--  [result equivalent to ("bread", ("cheese", "jam"))]
 
 /-!
 ## #4. Is Sum Commutative?
@@ -136,21 +146,33 @@ That expression, in turn uses an explcit match
 statement. The form you've mostly seen up to now 
 is really just notational shorthand for this kind 
 of definition.
+- Ryland: Done
 -/
 
 def sum_comm { α β : Type} : α ⊕ β → β ⊕ α :=
 fun s => 
   match s with
-  | _ => _
-  | _ => _
+  | (Sum.inl a : α ⊕ β) => (Sum.inr a : β ⊕ α)
+  | (Sum.inr b : α ⊕ β) => (Sum.inl b : β ⊕ α)
+
+-- Check
+def s1 : Sum Nat Bool := Sum.inl 1
+#check s1
+#eval s1
+
+def s1_reversed := sum_comm s1
+#check s1_reversed
+#eval s1_reversed
 
 /-!
 Can you always convert a term of type *β ⊗ α* into 
 one of type *α × β*? Prove it by writing a function 
 that does it. Call is sum_comm_reverse.
+- COME BACK TO THIS ONE IT IS WRONG WORDED I THINK [Sent Email Already to Sullivan]
 -/
 
 -- Here:
+
 
 
 /-!
@@ -176,21 +198,42 @@ for the first case and two for the second, each of
 which starts with a Sum.inr. You will need to use
 "nested" expressions involving Sum.inl and Sum.inr
 in both matching and to define return result values. 
+- Ryland: Done
 -/
 
 def sum_assoc { α β γ : Type} : α ⊕ (β ⊕ γ) → (α ⊕ β) ⊕ γ
-| (Sum.inl a) => (Sum.inl _)
-| (Sum.inr (Sum.inl b)) => _
-| _ => _
+| (Sum.inl a) => (Sum.inl (Sum.inl a))
+| (Sum.inr (Sum.inl b)) => (Sum.inl (Sum.inr b))
+| (Sum.inr (Sum.inr c)) => Sum.inr c
+
+-- Check
+def sum_assoc_check_1 : Bool ⊕ (Nat ⊕ String) := Sum.inl true
+#check sum_assoc_check_1 -- Bool ⊕ Nat ⊕ String
+#eval sum_assoc_check_1 -- Sum.inl true
+#check sum_assoc sum_assoc_check_1 -- (Bool ⊕ Nat) ⊕ String
+#eval sum_assoc sum_assoc_check_1 -- Sum.inl (Sum.inl true)
 
 /-!
 Does this conversion also work in reverse? Prove it
 with a function that takes a term of the second sum type
 (in the preceding example) as an argument and that returns
 a value of the first sum type as a result.
+- Ryland: Done
 -/
 
 -- Here:
+def sum_assoc_reverse { α β γ : Type} : (α ⊕ β) ⊕ γ → α ⊕ (β ⊕ γ)
+| (Sum.inl (Sum.inl a)) => Sum.inl a
+| (Sum.inl (Sum.inr b)) => (Sum.inr (Sum.inl b))
+| (Sum.inr c) => (Sum.inr (Sum.inr c))
+
+-- Check
+def sum_assoc_reverse_check_1 : ((Bool ⊕ Nat) ⊕ String) := Sum.inl (Sum.inl true)
+#check sum_assoc_reverse_check_1 -- ((Bool ⊕ Nat) ⊕ String)
+#eval sum_assoc_reverse_check_1 -- Sum.inl (Sum.inl true)
+#check sum_assoc_reverse sum_assoc_reverse_check_1 -- Bool ⊕ Nat ⊕ String
+#eval sum_assoc_reverse sum_assoc_reverse_check_1 -- Sum.inl true
+
 
 /-!
 ## #6. Products Distribute Over Sums
