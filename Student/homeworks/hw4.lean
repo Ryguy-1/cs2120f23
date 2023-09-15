@@ -248,11 +248,17 @@ value of type *α* and (2) either a value of type *β* or
 a value of type *γ*, then you can derive a value that is 
 either an *α* value and a *β* value, or an *α* value and 
 a *γ* value. 
+- Ryland: Done
  -/
 
- def prod_dist_sum {α β γ : Type} : _
- | _ => _
- | _ => _
+-- Ryland: formally called "prod_dist_sum"
+ def wowser {α β γ : Type} : α × (β ⊕ γ) → (α × β) ⊕ (α × γ)
+ | (a, (Sum.inl b)) => (Sum.inl (a, b))
+ | (a, (Sum.inr c)) => (Sum.inr (a, c))
+
+-- Check
+#check wowser ( (1, (Sum.inl true)) : (Nat × (Bool ⊕ String)) ) -- (Nat × Bool) ⊕ (Nat × String)
+#eval wowser ( (1, (Sum.inl true)) : (Nat × (Bool ⊕ String)) ) -- Sum.inl (1, true)
 
 /-!
 Does the preceding principle work in reverse? In other 
@@ -262,9 +268,17 @@ cheese or bread and jam. do you have bread and either
 cheese or jam? Prove it with a function, that converts
 any value of type *(α × β) ⊕ (α × γ)* into one of type 
 *α × (β ⊕ γ)*.
+- Ryland: Done
 -/
 
 -- Here:
+ def wowser_reverse {α β γ : Type} : (α × β) ⊕ (α × γ) → α × (β ⊕ γ)
+ | (Sum.inl (a, b)) => (a, Sum.inl b)
+ | (Sum.inr (a, c)) => (a, (Sum.inr c))
+
+-- Check
+#check wowser_reverse ( Sum.inl (1, true) : (Nat × Bool) ⊕ (Nat × String) ) -- Nat × (Bool ⊕ String)
+#eval wowser_reverse ( Sum.inl (1, true) : (Nat × Bool) ⊕ (Nat × String) ) -- (1, Sum.inl true)
  
 /-!
 In the forward (first) direction we can say that products
@@ -272,6 +286,7 @@ distribute over sums, just as, say, *4 * (2 + 3)* is the
 same as (4 * 2) + (4 * 3)*. In the reverse direction, we
 can say that can *factor out* the common factor, *4*. So
 in a sense, we're now doing Algebra 1 but with sandwiches! 
+- Ryland: Done
 -/
 
 /-!
@@ -284,17 +299,33 @@ Show that you can construct and return a value of type *wet*.
 Do this by defining a function called *its_wet*, that, if 
 given values of those types as arguments, returns a value of 
 type *wet*. 
+- Ryland: Done
 -/
 
 -- Here
+def its_wet {rain sprinkler wet : Type} : 
+  (rain ⊕ sprinkler) → 
+  (rain → wet) → 
+  (sprinkler → wet) 
+  → wet
+| (Sum.inl r), r2w, _ => r2w r
+| (Sum.inr s), _, s2w => s2w s
 
 /-!
 Now rewrite your function using the type names,
 *α, γ,* and *β* instead of *rain, sprinkler* and
 *wet*. Call it *sum_elim*. 
+- Ryland: Done
 -/
 
 -- Here:
+def sum_elim {α β γ : Type} : 
+  (α ⊕ β) → 
+  (α → γ) → 
+  (β → γ) 
+  → γ
+| (Sum.inl a), a2y, _ => a2y a
+| (Sum.inr b), _, b2y => b2y b
 
 /-!
 You should now better understand how to program 
@@ -302,6 +333,7 @@ with arbitrary values of arbitrary sum types. To do
 so, you need to be able to derive a result of the 
 return type, *γ* from *either* of the possible types 
 in the sum: from a value of either type *α* or *β*. 
+- Ryland: Done
 -/
 
 /-!
@@ -313,4 +345,5 @@ they correspond directly to fundamental principles
 of logical reasoning. The until now hidden purpose
 of this assignment has been to warm you up to this
 profound idea. 
+- Ryland: Done
 -/
