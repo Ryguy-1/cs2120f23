@@ -149,7 +149,7 @@ of definition.
 - Ryland: Done
 -/
 
-def sum_comm { α β : Type} : α ⊕ β → β ⊕ α :=
+def sum_comm {α β : Type} : α ⊕ β → β ⊕ α :=
 fun s => 
   match s with
   | (Sum.inl a : α ⊕ β) => (Sum.inr a : β ⊕ α)
@@ -169,11 +169,23 @@ Can you always convert a term of type *β ⊗ α* into
 one of type *α × β*? Prove it by writing a function 
 that does it. Call is sum_comm_reverse.
 - COME BACK TO THIS ONE IT IS WRONG WORDED I THINK [Sent Email Already to Sullivan]
+- Ryland: I just did this assuming that the signs should be ⊕ for both like in other reverse examples...
 -/
 
 -- Here:
+def sum_comm_reverse {α β : Type} : β ⊕ α → α ⊕ β :=
+fun s =>
+  match s with
+  | Sum.inl b => Sum.inr b
+  | Sum.inr a => Sum.inl a
 
+-- Check
+#check s1
+#eval s1
 
+def s1_reversed' := sum_comm_reverse s1
+#check s1_reversed
+#eval s1_reversed
 
 /-!
 ## #5: Is Sum Associative? 
