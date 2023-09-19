@@ -167,11 +167,9 @@ def s1_reversed := sum_comm s1
 #eval s1_reversed
 
 /-!
-Can you always convert a term of type *β ⊗ α* into 
-one of type *α × β*? Prove it by writing a function 
+Can you always convert a term of type *β ⊕ α* into 
+one of type *α ⊕ β*? Prove it by writing a function 
 that does it. Call is sum_comm_reverse.
-- COME BACK TO THIS ONE IT IS WRONG WORDED I THINK [Sent Email Already to Sullivan]
-- Ryland: I just did this assuming that the signs should be ⊕ for both like in other reverse examples...
 -/
 
 -- Here:
@@ -256,7 +254,7 @@ If you have bread and (cheese or jam) do you have
 (bread and cheese) or (bread and jam)? We think so.
 Before you move on, think about it!
 
-Define *wowser : α × (β ⊕ γ) → (α × β) ⊕ (α × γ).* 
+Define *prod_dist_sum : α × (β ⊕ γ) → (α × β) ⊕ (α × γ).* 
 In other words, if you have a value that includes (1) a 
 value of type *α* and (2) either a value of type *β* or 
 a value of type *γ*, then you can derive a value that is 
@@ -265,14 +263,13 @@ a *γ* value.
 - Ryland: Done
  -/
 
--- Ryland: formally called "prod_dist_sum"
- def wowser {α β γ : Type} : α × (β ⊕ γ) → (α × β) ⊕ (α × γ)
+ def prod_dist_sum {α β γ : Type} : α × (β ⊕ γ) → (α × β) ⊕ (α × γ)
  | (a, (Sum.inl b)) => (Sum.inl (a, b))
  | (a, (Sum.inr c)) => (Sum.inr (a, c))
 
 -- Check
-#check wowser ( (1, (Sum.inl true)) : (Nat × (Bool ⊕ String)) ) -- (Nat × Bool) ⊕ (Nat × String)
-#eval wowser ( (1, (Sum.inl true)) : (Nat × (Bool ⊕ String)) ) -- Sum.inl (1, true)
+#check prod_dist_sum ( (1, (Sum.inl true)) : (Nat × (Bool ⊕ String)) ) -- (Nat × Bool) ⊕ (Nat × String)
+#eval prod_dist_sum ( (1, (Sum.inl true)) : (Nat × (Bool ⊕ String)) ) -- Sum.inl (1, true)
 
 /-!
 Does the preceding principle work in reverse? In other 
@@ -286,13 +283,13 @@ any value of type *(α × β) ⊕ (α × γ)* into one of type
 -/
 
 -- Here:
- def wowser_reverse {α β γ : Type} : (α × β) ⊕ (α × γ) → α × (β ⊕ γ)
+ def prod_dist_sum_reverse {α β γ : Type} : (α × β) ⊕ (α × γ) → α × (β ⊕ γ)
  | (Sum.inl (a, b)) => (a, Sum.inl b)
  | (Sum.inr (a, c)) => (a, (Sum.inr c))
 
 -- Check
-#check wowser_reverse ( Sum.inl (1, true) : (Nat × Bool) ⊕ (Nat × String) ) -- Nat × (Bool ⊕ String)
-#eval wowser_reverse ( Sum.inl (1, true) : (Nat × Bool) ⊕ (Nat × String) ) -- (1, Sum.inl true)
+#check prod_dist_sum_reverse ( Sum.inl (1, true) : (Nat × Bool) ⊕ (Nat × String) ) -- Nat × (Bool ⊕ String)
+#eval prod_dist_sum_reverse ( Sum.inl (1, true) : (Nat × Bool) ⊕ (Nat × String) ) -- (1, Sum.inl true)
  
 /-!
 In the forward (first) direction we can say that products
