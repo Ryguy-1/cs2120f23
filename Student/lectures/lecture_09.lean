@@ -17,7 +17,7 @@ namespace cs2120
 Here's how the type is defined in Lean.
 -/
 
-inductive Empty : Type
+inductive Empty : Type -- Ryland: NO constructors, therefore, you cannot ever make an instance of it!
 
 /-!
 That's it: no constructors, no values. Voila, the Empty type. 
@@ -60,7 +60,7 @@ the following example, we use Unit as a simple example
 of an inhabited type.
 -/
 
-def inhabited_to_empty : Unit → Empty 
+def inhabited_to_empty : Unit → Empty  -- Ryland: the type "Unit -> Empty" is false because it can never be made
 | unit => _  -- can't write a term of the Empty type     
 
 /-!
@@ -80,10 +80,13 @@ of the empty type is to have it *assume* that it's given
 a value of this type as a parameter. 
 -/
 
-def empty_to_empty'' : Empty → Empty
+def empty_to_empty'' : Empty → Empty -- Ryland: False implies False = True (an impossibility implies an impossibility)
 | e => e
 
 def empty_to_empty' (e : Empty) := e -- return type inferred
+
+-- Ryland Class Notes
+def empty_to_empty (e : Empty) : Empty := nomatch e -- Ryland: this value can't exist anyways
 
 /-!
 This definition is subtle. Clearly it *is* possible to 
@@ -147,9 +150,11 @@ return type. We can thus implement a function from Empty
 to *any* type whatsoever!
 -/
 
-def empty_to_bool :         Empty → Bool := nomatch e
+-- Ryland: can return anything you want because can never match in the first place!
+def empty_to_bool :         Empty → Bool := nomatch e -- Ryland: yes, there is an implementation for all these 3!!!!
 def empty_to_nat :          Empty → Nat  := nomatch e
 def empty_to_α (α : Type) : Empty → α    := nomatch e 
+-- Ryland: All of these ARE inhabited (use implies function to determine if inhabited)
 
 /-!
 The final example is the general elimination rule
@@ -169,6 +174,7 @@ Empty, then it can promise to return a value of
 any type whatsoever. 
 -/
 
+-- Ryland: General case of the empty elimination type
 def empty_elim (α : Type) : Empty → α := nomatch e 
 
 /-!
@@ -181,7 +187,6 @@ then gerbils are really tiny neckless giraffes.
 
 /-!
 ### What Does a Function of Type (α → Empty) Imply?
-
 As a final key idea, suppose you have some type, α,
 and you actually *can* implement a function of type 
 α → Empty. What indisputible and important fact can 
@@ -190,6 +195,13 @@ you will be able to implement such a function?
 -/
 
 -- You answer here with a brief explanation
+-- Ryland: States
+-- true true
+-- true false -> false
+-- false true
+-- false false -> true
+-- Ryland: therefore, if actually do have an implementation of a function of this type (if the function is inhabited)
+--  then the type of α must be uninhabited (also Empty type)
 
 /-!
 ## Exercises
@@ -205,6 +217,7 @@ you will be able to implement such a function?
 - Is the type, {α : Type} → α → Empty, inhabited or not.
 - Prove your answer (Is {α : Type} → α → Empty, inhabited?)
 - Is the type, Empty → (Nat → Empty) inhabited? Prove it.
+  - Ryland: Inhabited because from false anything follows.
 - Prove this type uninhabited: {α : Type} → α × (α → Empty)
 -/
 
