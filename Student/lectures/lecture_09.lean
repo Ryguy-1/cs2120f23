@@ -222,3 +222,6 @@ you will be able to implement such a function?
 -/
 
 end cs2120
+
+
+-- Ryland: if α -> Empty is inhabited, then α must be uninhabited

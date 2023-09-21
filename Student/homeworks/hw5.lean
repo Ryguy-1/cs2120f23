@@ -55,7 +55,21 @@ no jam (there are no values of this type), or a proof
 that there is no cheese, and shows *in either case*
 that there can be no jam AND cheese. 
 -/
+/-
+Class Notes Below
+-/
+inductive Foo : Type
+def f2e (f : Foo) : Empty := nomatch f
+def no (α : Type) := α -> Empty
 
+def not_either_not_both' {jam cheese} :
+  ((no jam) ⊕ (no cheese)) ->
+  (no (jam × cheese))
+| Sum.inl nojam => (fun _ => _)
+| Sum.inr _ => _
+/-
+Class Notes Above
+-/
 def not_either_not_both { jam cheese } :
   ((jam → Empty) ⊕ (cheese → Empty)) → 
   (jam × cheese → Empty) 
