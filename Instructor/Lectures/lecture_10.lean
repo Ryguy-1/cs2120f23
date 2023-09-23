@@ -1,6 +1,4 @@
 /-! 
-INCOMPLETE AND UNDER CONSTRUCTION
-
 # Data Types: Recursive Types
 
 You've seen that we use the keyword, *inductive*, 
@@ -88,17 +86,17 @@ of such a type have a recursive structure.
 
 Define a function, *inner : Doll → Doll.* When applied to any 
 doll, *d*, if *d* is the *solid* doll then *inner* must return 
-*solid*, otherwise, if *d* is a nested doll, it must return the 
-one-smaller doll just inside of *d*. Then verify using #reduce
-that the function returns the correct answer when applied to
-*d3*.
+*solid*, otherwise, if *d* is a nested doll, then it must be 
+of the form (shell d') for some doll, d', and in this case the
+function should return d' 
 -/
 
 def inner: Doll → Doll
-| _ => _
-| _ => _
+| solid => solid
+| (shell d') => d'
 
 #reduce inner d3    -- expect (shell (shell solid))
+#reduce inner solid 
 
 /-!
 You would be correct to call *inner* an elimination rule for the
@@ -297,17 +295,22 @@ in place of *Nat.succ n'*. This is one of the few little
 Lean notational details that you just have to remember.
 -/
 
+def n0 := Nat.zero
+def n1 := Nat.succ n0
+def n2 := Nat.succ n1
+def n3 := Nat.succ n2
+
 def is_zero'' : Nat → Bool  -- this works but is verbose
 | Nat.zero => true
 | (Nat.succ n') => false 
 
-def is_zero' : Nat → Bool   -- (1 + n') is not a pattern
+def is_zero' : Nat → Bool   
 | 0 => true
-| (1 + n') => false           
+| (1 + n') => false         -- (1 + n') not a valid pattern     
 
 def is_Zero' : Nat → Bool   -- our preferred notation
 | 0 => true                 -- 0 for Nat.zero
-| n' + 1 => false           -- n' + 1 for (Nat.succ n')      
+| n' + 1 => false           -- n' + 1 is a valid pattern    
 
 /-!
 ### Exercises
@@ -319,6 +322,10 @@ of n, in contradistinction to the *successor* of n (n + 1).
 Hint: Look at how you wrote *inner* for the *Doll* type. 
 -/
 
+def pred : Nat → Nat 
+| 0 => 0
+| (Nat.succ n') => n'   -- destructures nat>0 to (succ n')
+
 -- Answer here
 
 -- test cases
@@ -328,11 +335,15 @@ Hint: Look at how you wrote *inner* for the *Doll* type.
 /-!
 #2: Write a function, *mk_doll : Nat → Doll*, that takes
 any natural number argument, *n*, and that returns a doll 
-n shells deep. Then verify using #reduce that (mk_doll 3)
+n shells deep. The verify using #reduce that (mk_doll 3)
 returns the same doll as *d3*. 
 -/
 
 -- Answer here
+
+def mk_doll : Nat → Doll 
+| _ => _
+| _ => _
 
 -- test cases
 #check mk_doll 3
@@ -345,87 +356,54 @@ takes any two natural numbers and that returns Boolean
 many cases do you need to consider?
 -/
 
+def nat_eq : Nat → Nat → Bool
+| 0, 0 => true
+| 0, n' + 1 => false
+| n' + 1, 0 => false
+| (n' + 1), (m' + 1) => nat_eq _ _
+
+#eval nat_eq 6 5
+
 /-!
-#3: Write a function, *nat_eq : Nat → Nat → Bool*, that
+#3: Write a function, *nat_le : Nat → Nat → Bool*, that
 takes any two natural numbers and that returns Boolean 
 *true* if the first value is less than or equal to the 
-second, and false otherwise. 
+second, and false otherwise. Hint: The key to solving
+this problem is to figure out the relevant cases, match 
+on them, and then return the right result *in each case*.
 -/
 
+-- Here
+
+def nat_le : Nat → Nat → Bool
+| 0, _ => true
+| (n' + 1), 0 => false
+| (_), (_) => _
+
+#eval nat_le 0 0    -- expect true
+#eval nat_le 0 2    -- exect true
+#eval nat_le 1 0    -- expect false
+#eval nat_le 1 1    -- expect true
+#eval nat_le 2 1    -- expect false
+#eval nat_le 2 3    -- expect false
+
 /-!
-Write a function nat_add : Nat → Nat → Nat, that takes
-two Nat values and returns the Nat value representing
-their sum. Hint: Case analysis on the second argument.
+
+#4: Write a function nat_add : Nat → Nat → Nat, that 
+takes two Nat values and returns the Nat representing
+their sum. Method: You could do case analysis on either
+argument, but, to be consistent with Lean's definitions,
+do case analysis on the second (Nat) argument, returning
+the right result in either case. 
+
+The challenge is to rewrite the inductive case to one
+employing structural recursion. Remember, you assume
+you have (1) a successor constructor, *succ*, and (2)
+a recursive solution for the sum in the case where the 
+second argument to the recursive function application
+is structurally smaller than that argument to nat_add.  
  -/
 
-#check Nat.add
-
-/-!
-## The List α Data Type
-
-A small extension to the types we've defined so far 
-will let us represent mathematical *lists* of objects
-as terms of an inductive type. Given any type of list
-elements, α, we can define a list of elements of that
-type as either the empty list (which we'll call *nil*)
-of as being constructed from two parts: an object of
-type α (we'll call it the *head* of the list) and a
-one-smaller *list* of objects of the same type. 
--/
-
-/-!
-### Constructors
--/
-
-namespace cs2120
-
-inductive List (α : Type) : Type 
-| nil
-| cons (head : α) (tail : List α) 
-
-open List
-
-end cs2120
-
-def l0 := @List.nil Nat   -- [] : List Nat
-def l1 := List.cons 0 l0  -- [0, []]
-def l2 := List.cons 1 l1  -- [1, [0]]
-def l3 := List.cons 2 l2  -- [2, [1, [0, []]]]
-
-/-!
-Lean provides convenient notations.
-
-- [] is notation for the empty list
-- :: is infix notation for List.cons
-- [a1, a2, a3, ...] is for a1::a2::a3::...::nil
--/
-
-#eval ([] : List Nat)
-#eval 0::[]
-#eval 3::2::1::0::[]
-#eval [3,2,1,0]
-
-/-!
-
-### Elimination
-
-Elimination is just like with the Doll and Nat 
-types, by pattern matching, but now you have to
-account for the additional element of each non-nil
-term of type List α.
--/
-
-def len {α : Type} : List α → Nat
-| [] => 0
-| _::t => 1 + len t
-
-#reduce len []
-#reduce len [3,2,1,0]
-#reduce len (3::2::1::0::[] : List Nat) 
-
-/-!
-Exercise. Write a function polymorphic in one type,
-α, that takes two arguments of type List α and returns
-the result of appending the second list after the first.
-Hint: try case analysis on the first list argument.   
--/
+def add : Nat → Nat → Nat
+| m, 0 => m
+| m, (Nat.succ n') => _
