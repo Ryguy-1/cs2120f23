@@ -1,5 +1,7 @@
 /-!
 # Homework 5: Inhabitedness and Induction
+## Ryland Birchmeier
+## Computing ID: zbp6dw
 
 The PURPOSE of this homework is to greatly strengthen 
 your understanding of reasoning with sum and product
@@ -145,10 +147,14 @@ Nat, n, and, if n is zero, returns zero, otherwise analyze
 n as (Nat.succ n') and return n'. Yes this question should
 be easy. Be sure you understand destructuring and pattern
 matching.  
+
+[[[- Ryland: Done]]]
 -/
 
 -- Here
-
+def pred: Nat -> Nat
+| 0 => 0
+| (Nat.succ n') => n'
 
 
 -- Test cases
@@ -162,10 +168,20 @@ Write a function, *mk_doll : Nat → Doll*, that takes
 any natural number argument, *n*, and that returns a doll 
 n shells deep. The verify using #reduce that (mk_doll 3)
 returns the same doll as *d3*. 
+
+[[[- Ryland: CHECK IF CAN ADD DOLL!!]]]
 -/
 
--- Answer here
+-- Answer here (I ADDED DOLL DEFINITION CHECK IF CORRECT)
+inductive Doll : Type
+| solid -- Ryland: very last doll inside
+| shell (d : Doll) -- Ryland: a doll is otherwise a shell
 
+open Doll
+
+def mk_doll : Nat → Doll
+| 0 => solid
+| (Nat.succ n') => shell (mk_doll n')
 
 
 -- test cases
@@ -178,14 +194,16 @@ returns the same doll as *d3*.
 Write a function, *nat_eq : Nat → Nat → Bool*, that
 takes any two natural numbers and that returns Boolean 
 *true* if they're equal, and false otherwise. Finish
-off the definition by filling the remaining hole (_).
+off the definition by filling the remaining hole (_). 
+
+[[[- Ryland: DONE]]]
 -/
 
 def nat_eq : Nat → Nat → Bool
 | 0, 0 => true
 | 0, n' + 1 => false
 | n' + 1, 0 => false
-| (n' + 1), (m' + 1) => _
+| (n' + 1), (m' + 1) => nat_eq n' m'
 
 -- a few tests
 #eval nat_eq 0 0
@@ -206,9 +224,25 @@ takes any two natural numbers and that returns Boolean
 second, and false otherwise. Hint: what are the relevant 
 cases? Match to destructure them then return the right
 result *in each case*.
+
+[[[- Ryland: DONE]]]
 -/
 
--- Here
+-- Here (Ryland: Repurposed from last one!)
+def nat_le : Nat → Nat → Bool
+| 0, 0 => true -- first equal (true)
+| 0, n' + 1 => true -- first less than (true)
+| n' + 1, 0 => false -- false otherwise
+| (n' + 1), (m' + 1) => nat_le n' m'
+
+-- a few tests (Ryland Repurposed)
+#eval nat_le 0 0
+#eval nat_le 0 1
+#eval nat_le 1 0
+#eval nat_le 1 1
+#eval nat_le 2 0
+#eval nat_le 2 1
+#eval nat_le 2 2
 
 /-!
 ###  #5. Nat Number Addition 
