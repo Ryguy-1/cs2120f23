@@ -308,7 +308,9 @@ test cases to show that it appears to be working.
 
 def mul : Nat → Nat → Nat
 | m, 0 => 0
-| m, (Nat.succ n') => add (mul m n') (mul m n')
+| m, (Nat.succ n') => add (_) (_)
+
+-- Ex: 5 5 5 5 (m = 5, n = 4)
 
 -- Ryland: Some test cases
 #reduce mul 0 0   -- expect 0
