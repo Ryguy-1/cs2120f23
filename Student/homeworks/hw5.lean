@@ -17,6 +17,8 @@ Finally, what you're seeing here is the FIRST set of
 questions on this homework, giving you an opportunity
 to deepen your understanding of the Empty type and its
 uses. 
+
+[[[- Ryland: Done]]]
 -/
 
 /-!
@@ -38,6 +40,8 @@ youwant to *return* a result of type (α → Empty), to
 showing that there can be no α value, then you need 
 to return a *function*; and you will often want to do
 so by writing the return value as a lambda expression. 
+
+[[[- Ryland: Done]]]
 -/
 
 /-!
@@ -56,6 +60,8 @@ argument into two cases: either a proof that there is
 no jam (there are no values of this type), or a proof
 that there is no cheese, and shows *in either case*
 that there can be no jam AND cheese. 
+
+[[[- Ryland: Done]]]
 -/
 
 /-!
@@ -67,6 +73,8 @@ shorthand, *no α* for the type *α → Empty*. Then
 in each place where a type like *α → Empty appears
 in this homework, replace it with *no α*. Use the
 right local names in each instance, of course. 
+
+[[[- Ryland: Done]]]
 -/
 def no (α : Type) := α → Empty
 
@@ -74,12 +82,21 @@ def no (α : Type) := α → Empty
 We've now replaced each α → Empty with no α. We
 suggest that you go ahead and use *no* wherever
 doing so makes the logical meaning clearer. 
+
+[[[- Ryland: Done]]]
 -/
 def not_either_not_both { jam cheese } :
   ((no jam) ⊕ (no cheese)) → 
   (no (jam × cheese)) 
-| Sum.inl nojam => (fun _ => _)
-| Sum.inr _ => _
+| Sum.inl nojam => (fun (jamcheese : jam × cheese) => nojam jamcheese.fst)
+| Sum.inr nocheese => (fun (jamcheese : jam × cheese) => nocheese jamcheese.snd)
+
+-- [EXTRA // Ryland]: (other way that I find clearer):
+def not_either_not_both' { jam cheese } :
+  ((jam → Empty) ⊕ (cheese → Empty)) → 
+  (jam × cheese → Empty)
+| Sum.inl jam2empty => (λ (a : jam × cheese) => jam2empty a.fst)
+| Sum.inr cheese2empty => (λ (a : jam × cheese) => cheese2empty a.snd)
 
 /-!
 ### #2: Not One or Not the Other Implies Not Both
@@ -90,11 +107,13 @@ the types, rather than the more suggestive but specific
 names, *jam* and *cheese*. 
 
 {α β : Type} → (α → Empty ⊕ β → Empty) → (α × β → Empty).
+
+[[[- Ryland: Done]]]
 -/
 
 def demorgan1  {α β : Type} : ((α → Empty) ⊕ (β → Empty)) → (α × β → Empty)  
-| (Sum.inl noa) => _
-| (Sum.inr nob) => _
+| (Sum.inl noa) => (λ ab => noa ab.fst)
+| (Sum.inr nob) => (λ ab => nob ab.snd)
 
 /-!
 ### #3: Not Either Implies Not One And Not The Other
@@ -108,7 +127,7 @@ given *any* types, α and β,
 -/
 
 def demorgan2 {α β : Type} : (α ⊕ β → Empty) → ((α → Empty) × (β → Empty))
-| noaorb => _
+| noaorb => (λ 
 
 
 /-!
