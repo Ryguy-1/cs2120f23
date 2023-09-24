@@ -277,11 +277,13 @@ def nat_le : Nat → Nat → Bool
 
 Complete this function definition to implement
 a natural number addition function. 
+
+[[[- Ryland: Done]]]
  -/
 
 def add : Nat → Nat → Nat
 | m, 0 => m
-| m, (Nat.succ n') => _   -- hint: recursion
+| m, (Nat.succ n') => add (m+1) n'   -- hint: recursion
 
 
 -- Some test cases
@@ -306,7 +308,15 @@ test cases to show that it appears to be working.
 
 def mul : Nat → Nat → Nat
 | m, 0 => 0
-| m, (Nat.succ n') => add (_) (_)
+| m, (Nat.succ n') => add (mul m n') (mul m n')
+
+-- Ryland: Some test cases
+#reduce mul 0 0   -- expect 0
+#reduce mul 5 0   -- expect 0
+#reduce mul 0 5   -- expect 0
+#reduce mul 5 4   -- expect 20
+#reduce mul 4 5   -- expect 20
+#reduce mul 5 5   -- expect 25
 
 /-!
 ### Sum Binary Nat Function Over Range 0 to n 
