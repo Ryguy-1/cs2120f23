@@ -124,10 +124,12 @@ conclude that you don't have an α  Here's a function type that asserts
 this fact in a general way. Show it's true in general
 by implementing it. An implementation will show that
 given *any* types, α and β,  
+
+[[[- Ryland: Done]]]
 -/
 
 def demorgan2 {α β : Type} : (α ⊕ β → Empty) → ((α → Empty) × (β → Empty))
-| noaorb => (λ 
+| noaorb => (fun a => noaorb (Sum.inl a), fun b => noaorb (Sum.inr b))
 
 
 /-!
@@ -138,9 +140,14 @@ we give you the function type that expresses this idea,
 and you must show it's true by implementing the function. 
 Hint: You might want to use an explicit match expression
 in writing your solution.
+
+[[[- Ryland: Done]]]
 -/
 def demorgan3 {α β : Type} : ((α → Empty) × (β → Empty)) → ((α ⊕ β) → Empty)  
-| _ => _
+| (a2e, b2e) => 
+  fun aorb => match aorb with
+  | Sum.inl a => a2e a
+  | Sum.inr b => b2e b
 
 /-!
 ## PART 2
@@ -148,6 +155,8 @@ def demorgan3 {α β : Type} : ((α → Empty) × (β → Empty)) → ((α ⊕ �
 The following problems aim to strengthen your 
 understanding of inductive type definitions and
 recusrive functions.
+
+[[[- Ryland: Done]]]
 -/
 
 -- Here are some named Nat values, for testing
@@ -191,7 +200,7 @@ returns the same doll as *d3*.
 [[[- Ryland: CHECK IF CAN ADD DOLL!!]]]
 -/
 
--- Answer here (I ADDED DOLL DEFINITION CHECK IF CORRECT)
+-- Answer here (I ADDED DOLL DEFINITION CHECK IF OK)
 inductive Doll : Type
 | solid -- Ryland: very last doll inside
 | shell (d : Doll) -- Ryland: a doll is otherwise a shell
