@@ -363,7 +363,7 @@ to and including n.
 
 def sum_f : (Nat → Nat) → Nat → Nat 
 | f, 0 => f 0
-| f, n' + 1 => add (f (n' + 1)) (sum_f f n')
+| f, n' + 1 => add (f (n' + 1)) (sum_f f n') -- can use add function from before
 
 -- Ryland Checks:
 def square : Nat -> Nat
