@@ -308,7 +308,7 @@ test cases to show that it appears to be working.
 
 def mul : Nat → Nat → Nat
 | m, 0 => 0
-| m, (Nat.succ n') => add (_) (_)
+| m, (Nat.succ n') => add (m) (mul m n')
 
 -- Ex: 5 5 5 5 (m = 5, n = 4)
 
@@ -336,7 +336,12 @@ to and including n.
 -/
 
 def sum_f : (Nat → Nat) → Nat → Nat 
-| f, 0 => _
-| f, n' + 1 => _
+| f, 0 => f 0
+| f, n' + 1 => add (f (n' + 1)) (sum_f f n')
 
+def square : Nat -> Nat
+| n => n * n
 
+#eval square 4
+#eval sum_f square 2 -- 5
+#eval sum_f square 3 -- 14
