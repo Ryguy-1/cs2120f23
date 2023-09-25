@@ -76,6 +76,7 @@ right local names in each instance, of course.
 
 [[[- Ryland: Done]]]
 -/
+
 def no (α : Type) := α → Empty
 
 /-!
@@ -85,6 +86,7 @@ doing so makes the logical meaning clearer.
 
 [[[- Ryland: Done]]]
 -/
+
 def not_either_not_both { jam cheese } :
   ((no jam) ⊕ (no cheese)) → 
   (no (jam × cheese)) 
@@ -115,6 +117,11 @@ def demorgan1  {α β : Type} : ((α → Empty) ⊕ (β → Empty)) → (α × �
 | (Sum.inl noa) => (λ ab => noa ab.fst)
 | (Sum.inr nob) => (λ ab => nob ab.snd)
 
+-- [EXTRA // Ryland] another way of writing with clear typing:
+def demorgan1'  {α β : Type} : ((α → Empty) ⊕ (β → Empty)) → (α × β → Empty)  
+| Sum.inl a2e => (fun (ab : α × β) => a2e ab.fst)
+| Sum.inr b2e => (fun (ab : α × β) => b2e ab.snd)
+
 /-!
 ### #3: Not Either Implies Not One And Not The Other
 Now suppose that you don't have either jam and cheese. 
@@ -131,6 +138,9 @@ given *any* types, α and β,
 def demorgan2 {α β : Type} : (α ⊕ β → Empty) → ((α → Empty) × (β → Empty))
 | noaorb => (fun a => noaorb (Sum.inl a), fun b => noaorb (Sum.inr b))
 
+-- [EXTRA // Ryland] another way of writing with clear typing:
+def demorgan2' {α β : Type} : (α ⊕ β → Empty) → ((α → Empty) × (β → Empty))
+| sumab => (fun (a : α) => sumab (Sum.inl a : α ⊕ β), fun (b : β) => sumab (Sum.inr b : α ⊕ β))
 
 /-!
 ### #4: Not One And Not The Other Implies Not One Or The Other 
@@ -143,11 +153,19 @@ in writing your solution.
 
 [[[- Ryland: Done]]]
 -/
+
 def demorgan3 {α β : Type} : ((α → Empty) × (β → Empty)) → ((α ⊕ β) → Empty)  
 | (a2e, b2e) => 
   fun aorb => match aorb with
   | Sum.inl a => a2e a
   | Sum.inr b => b2e b
+
+-- [EXTRA // Ryland] another way of writing with clear typing:
+def demorgan3' {α β : Type} : ((α → Empty) × (β → Empty)) → ((α ⊕ β) → Empty)  
+| (a2e, b2e) => fun (aSb : α ⊕ β) => 
+  match (aSb : α ⊕ β) with 
+  | Sum.inl (a : α) => a2e a
+  | Sum.inr (b : β) => b2e b
 
 /-!
 ## PART 2
@@ -197,13 +215,15 @@ any natural number argument, *n*, and that returns a doll
 n shells deep. The verify using #reduce that (mk_doll 3)
 returns the same doll as *d3*. 
 
-[[[- Ryland: CHECK IF CAN ADD DOLL!!]]]
+[[[- Ryland: Done, but I added Doll Defintion for Checking!]]]
 -/
 
--- Answer here (I ADDED DOLL DEFINITION CHECK IF OK)
+-- Answer here
+
+-- (Note -> Ryland: I ADDED DOLL DEFINITION TO CHECK)
 inductive Doll : Type
-| solid -- Ryland: very last doll inside
-| shell (d : Doll) -- Ryland: a doll is otherwise a shell
+| solid
+| shell (d : Doll)
 
 open Doll
 
@@ -214,6 +234,9 @@ def mk_doll : Nat → Doll
 
 -- test cases
 #check mk_doll 3
+#reduce mk_doll 0
+#reduce mk_doll 1
+#reduce mk_doll 2
 #reduce mk_doll 3
 
 /-!
@@ -229,19 +252,18 @@ off the definition by filling the remaining hole (_).
 
 def nat_eq : Nat → Nat → Bool
 | 0, 0 => true
-| 0, n' + 1 => false
-| n' + 1, 0 => false
+| 0, _ + 1 => false
+| _ + 1, 0 => false
 | (n' + 1), (m' + 1) => nat_eq n' m'
 
 -- a few tests
-#eval nat_eq 0 0
+#eval nat_eq 0 0 -- true
 #eval nat_eq 0 1
 #eval nat_eq 1 0
-#eval nat_eq 1 1
+#eval nat_eq 1 1 -- true
 #eval nat_eq 2 0
 #eval nat_eq 2 1
-#eval nat_eq 2 2
-
+#eval nat_eq 2 2 -- true
 
 /-!
 ### #4. Natural Number Less Than Or Equal
@@ -256,21 +278,21 @@ result *in each case*.
 [[[- Ryland: DONE]]]
 -/
 
--- Here (Ryland: Repurposed from last one!)
+-- Here
 def nat_le : Nat → Nat → Bool
 | 0, 0 => true -- first equal (true)
-| 0, n' + 1 => true -- first less than (true)
-| n' + 1, 0 => false -- false otherwise
+| 0, _ + 1 => true -- first less than (true)
+| _ + 1, 0 => false -- false otherwise
 | (n' + 1), (m' + 1) => nat_le n' m'
 
--- a few tests (Ryland Repurposed)
-#eval nat_le 0 0
-#eval nat_le 0 1
+-- Ryland Check:
+#eval nat_le 0 0 -- true
+#eval nat_le 0 1 -- true
 #eval nat_le 1 0
-#eval nat_le 1 1
+#eval nat_le 1 1 -- true
 #eval nat_le 2 0
 #eval nat_le 2 1
-#eval nat_le 2 2
+#eval nat_le 2 2 -- true
 
 /-!
 ###  #5. Nat Number Addition 
@@ -304,10 +326,12 @@ can't use Lean's Nat multiplication function.
 Your implementation should use productively
 the add function you just definied. Wite a few
 test cases to show that it appears to be working. 
+
+[[[- Ryland: Done]]]
  -/
 
 def mul : Nat → Nat → Nat
-| m, 0 => 0
+| _, 0 => 0
 | m, (Nat.succ n') => add (m) (mul m n')
 
 -- Ex: 5 5 5 5 (m = 5, n = 4)
@@ -333,15 +357,24 @@ For example, you might use the squaring function
 as an argument, with a nat, n, to obtain the 
 sum of the squares of all the numbers from 0
 to and including n. 
+
+[[[- Ryland: Done]]]
 -/
 
 def sum_f : (Nat → Nat) → Nat → Nat 
 | f, 0 => f 0
 | f, n' + 1 => add (f (n' + 1)) (sum_f f n')
 
+-- Ryland Checks:
 def square : Nat -> Nat
 | n => n * n
+def add_1 : Nat -> Nat
+| n => n + 1
 
+-- Ryland Check:
 #eval square 4
 #eval sum_f square 2 -- 5
 #eval sum_f square 3 -- 14
+
+#eval sum_f add_1 2 -- 6
+#eval sum_f add_1 5 -- 21
