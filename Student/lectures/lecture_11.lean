@@ -27,14 +27,15 @@ provides a way to assign a *meaning* to each and every
 
 The language of arithmetic is a formal language. Its
 *wffs* include the following:
-- *1 + 113
-- 10 = 11* 
-- "x * y = 1"
+- 1 + 113
+- 10 = 11 
+- "x * y = 1" -- Ryland: having syntatically correct expression doesn't necessarilly have to have semantic meaning yet
+-- semantic meaning = expression (x * y) + valuation (x=1, y=2)
 
 On the other hand, the following strings of symbols
 are not in the set of expressions defined by the syntax 
 of arithmetic.
-- *+ x +* 
+- + x +
 - 1 >== 2
 - Hello
 
@@ -71,17 +72,20 @@ other ordinary programming language.
 
 ### Atomic Propositions
 
+-- Ryland: example of something NOT atomic proposition:
+--  "this is cat and that is dog" (can be subdivided, therefore not atomic proposition)
+
 Propositional logic starts with the notion of an
 *atomic proposition*. An atomic proposition, *P*, 
 is a declarative statement that cannot be broken 
 into smaller propositions, and for which it makes 
-sense to ask *Is it true or not that P?*. Here are 
+sense to ask *Is it true or not that P?*. Here are -- [[[[[ Ryland: THIS IS GOOD TEST ]]]]
 some examples of atomic propositions:
 - It's raining
 - The ground is wet
 - x * y = 1
 
-Because atomic propositions don't break up into smaller
+Because atomic propositions don't break up into smallerInstructor/Lectures/lecture_11.lean
 elements, and to make it easier to read and write 
 expressions, it's the usual practice to use variables,
 sometimes called propositional letters, to stand for 
@@ -122,16 +126,22 @@ smaller ones. Here are the rules.
   - b ∧ c     -- b and c
   - b ∨ c     -- b or c
   - b ⇒ c     -- b implies c; if b then c
-  - b ↔ c     -- b if and only if c; b and c are equivalent
+  - b ↔ c     -- b if and only if c; b and c are equivalent -- Ryland: Must Have Same Value
 
 That's it! Here then are some valid expressions in
 propositional logic:
 - {a}           -- it's raining
 - {b}           -- the ground is wet
+
+
+Now assume that a and b are any expressions
 - ¬a            -- it's not raining
 - a ⇒ b         -- if it's raining then the ground is wet
 - a ∨ b         -- it's raining or the ground is wet
 - (a ∧ b) ∨ ¬a  -- (raining and wet) or (not raining) 
+
+-- Ryland: separation between VARIABLES AND EXPRESSIONS
+--  variable come before expressions somewhat
 
 Note: Most informal (English/natural language) 
 definitions of propositional logic don't distinguish 
@@ -179,6 +189,8 @@ then there are *four* interpretations.
 - {a ↦ false, b ↦ true} 
 - {a ↦ false, b ↦ false}
 
+-- Ryland Note: with n variables => 2^n interpretations
+
 You should recognize these lists as the input sides of 
 truth tables, with the output column determined by the
 expression to be evaluated. Here's an example. See first
@@ -186,6 +198,8 @@ that the input (left) side lists variables, while the right
 side lists values of expressions. Second, note that that
 there are two interpretations for the one input variable,
 *a*. 
+
+-- [[[[ Ryland NOTE: Each Row Corresponds to an Interpretation ]]]]
 
 |variable |expression |
 | a       |   ¬{a}    |
@@ -347,8 +361,8 @@ inductive binary_op : Type
 
 inductive Expr : Type
 | var_exp (v : var)
-| un_exp (op : unary_op) (e : Expr)
-| bin_exp (op : binary_op) (e1 e2 : Expr)
+| un_exp (op : unary_op) (e : Expr) -- Note: Building bigger ops
+| bin_exp (op : binary_op) (e1 e2 : Expr) -- Note: Building even bigger ops
 
 open Expr
 
@@ -390,12 +404,14 @@ to the same idea in arithmetic, which states
 that * applies before +, for example. 
 -/
 
-notation "{"v"}" => var_exp v
+notation "{"v"}" => var_exp v -- Ryland: building expression from variable
 prefix:max "¬" => un_exp unary_op.not 
 infixr:35 " ∧ " => bin_exp binary_op.and  
 infixr:30 " ∨ " => bin_exp binary_op.or 
 infixr:25 " ⇒ " =>  bin_exp binary_op.imp
 infixr:20 " ⇔ " => bin_exp binary_op.iff 
+
+-- Ryland: 'r' at end of infix'r' means right associative
 
 --  Now we have a "concrete" syntax for our language!
 def e0 := {v₀}
@@ -403,7 +419,6 @@ def e1 := ¬e0
 def e2 := e0 ∧ e1
 def e3 := e0 ∨ e1
 def e4 := (e2 ∧ e3) ∨ e0
-
 
 /-!
 ### Semantics
