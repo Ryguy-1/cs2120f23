@@ -163,11 +163,15 @@ def map_not : List Bool → List Bool
 Define a function called *countdown* that takes a 
 natural number argument, *n*, and that returns a list 
 of all the natural numbers from *n* to *0*, inclusive. 
+
+[[Ryland: DONE]]
 -/
 
 -- Your answer here
 
-
+def countdown : Nat -> List Nat
+| 0 => [0]
+| (n' + 1) => (n' + 1)::countdown n'
 
 -- test cases
 #eval countdown 0            -- expect [0]
