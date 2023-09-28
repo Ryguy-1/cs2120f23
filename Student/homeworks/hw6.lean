@@ -1,5 +1,7 @@
 /-!
 # Homework 6
+## Ryland Birchmeier
+## Computing ID: zbp6dw
 
 The established rules apply. Do this work on your own.
 
@@ -13,6 +15,8 @@ understanding of formal languages, and propositional logic,
 (PL) in particular, including the syntax and semantics of
 PL, and translations between formal statements in PL and
 corresponding concrete English-language examples.
+
+[[Ryland: DONE]]
 -/
 
 /-! 
@@ -28,6 +32,8 @@ and returns the result of applying *f* to *a* one or more
 times. The first function just applies *f* to *a* once. The
 second function applies *f* to *a* twice. Be sure you fully
 understand these definitions before proceeding. 
+
+[[Ryland: DONE]]
 -/
 
 def apply {a : α} : (α → α) → α → α 
@@ -45,13 +51,15 @@ as just *a*. Hint: recursion on *n*. That is, you will have
 two cases: where *n* is *0*; and where *n* is greater than 
 *0*, and can thus be written as *(1 + n')* for some smaller
 natural number, *n'*.
+
+[[Ryland: DONE]]
 -/
 
 -- Answer here
 
 def apply_n {α : Type} : (α → α) → α → Nat → α  
-| f, a, 0 => _
-| f, a, (n' + 1) => _
+| _, a, 0 => a
+| f, a, (n' + 1) => f (apply_n f a n')
 
 -- Test cases: confirm that expectations are correct
 
@@ -78,11 +86,13 @@ The base case is of course the empty list. Define
 a function called *len* that takes a list of 
 values of any type, α, and that returns the length
 of the list.
+
+[[Ryland: DONE]]
 -/
 
 def len {α : Type} : List α → Nat
-| _ => _
-| h::t => _
+| [] => 0
+| _::t => (1 + len t)
 
 #eval @len Nat []                   -- expect 0
 #eval len [0,1,2]                   -- expect 3
@@ -104,11 +114,13 @@ the result of recursively reducing the rest of the
 list. You will have to figure out what the return
 value for the base case of an empty list needs to
 be for your function to work in all cases. 
+
+[[Ryland: DONE]]
 -/
 
 def reduce_and : List Bool → Bool
-| _ => _
-| _ => and _ _
+| [] => true
+| h::t => and h (reduce_and t)
 
 -- Test cases
 
@@ -117,6 +129,9 @@ def reduce_and : List Bool → Bool
 #eval reduce_and [true, true]     -- expect true
 #eval reduce_and [false, true]    -- expect false
 
+-- Ryland Checks:
+#eval reduce_and [true, true, true, true, false, true] --false
+#eval reduce_and [true, true, true, true, true, true] --true
 
 /-! 
 ### #4 Negate a List of Booleans 
@@ -127,15 +142,20 @@ values, where each entry in the returned list is the
 negation of the corresonding element in the given
 list of Booleans. For example, *map_not [true, false]*
 should return [false, true].
+
+[[Ryland: DONE]]
 -/
 
 def map_not : List Bool → List Bool 
 | [] => []
-| h::t => _   -- hint: use :: to construct answer
+| h::t => not h::map_not t   -- hint: use :: to construct answer
 
 -- test cases
 #eval map_not []              -- exect []
 #eval map_not [true, false]   -- expect [false, true]
+
+-- Ryland Checks:
+#eval map_not [true, false, false, true]   -- expect [false, true, true, false]
 
 /-! 
 ### #5 List the First n Natural Numbers
