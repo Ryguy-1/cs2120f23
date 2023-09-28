@@ -23,6 +23,7 @@ inductive unary_op : Type
 inductive binary_op : Type
 | and
 | or
+| imp
 
 inductive Expr : Type
 | var_exp (v : var)
@@ -47,9 +48,14 @@ Semantics
 def eval_un_op : unary_op → (Bool → Bool)
 | unary_op.not => not
 
+def implies : Bool → Bool → Bool
+| true, false => false
+| _, _ => true
+
 def eval_bin_op : binary_op → (Bool → Bool → Bool)
 | binary_op.and => and
 | binary_op.or => or
+| binary_op.imp => implies
 
 def Interp := var → Bool  
 
@@ -177,6 +183,13 @@ and moreover, we'll often do so without referring to
 any particular natural language translations. That is,
 we'll study logic *in the abstract*. 
 
+##################################
+Ryland Types:
+- Valid -> always true [NOTE: Having function in Lean means that it is Valid]
+- Satisfiable -> sometimes true
+- Unsatisfiable -> never true
+##################################
+
 EXERCISE: Refer to each of the problems in HW5, Part 1. 
 For each one, express the proposition that each function
 type represents using our formal notation for propositional
@@ -188,10 +201,30 @@ First, define *b, c,* *j,* and *a* as propositional variables
 (of type *var*). We'll use *b* for *bread* or *beta*,* *c* for 
 *cheese,* *j* for *jam,* and *a* for α*. 
 -/
+def b := var.mk 0 -- 0 is the index of the variable sort of
+def j := var.mk 1
+def c := var.mk 2
+def a := var.mk 3
+
+-- Class note: get the index out of the c structure
+#eval c.n
+
 
 -- Define B, C, J and A as corresponding atomic propositions (Expr) 
+def B := {b} -- 'b' is a variable, and 'B' is an expression
+def J := {j}
+def C := {c}
+def A := {a}
 
 -- Now redefine the function names in HW5 in propositional logic (Expr)
+/-
+def not_either_not_both { jam cheese } :
+  ((no jam) ⊕ (no cheese)) → 
+  (no (jam × cheese)) 
+-/
+def e0 := (¬J ∨ ¬C) ⇒ ¬(J ∧ C)
+#eval eval_expr e0 (λ v => false)
+
 
 -- Next go back and extend our formalism to support the implies connective
 
