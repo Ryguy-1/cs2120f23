@@ -192,8 +192,8 @@ this function as an analog of natural number addition.
 
 -- Here
 
-def concat {α : Type} : _
-| [], m => _
+def concat {α : Type} : List α -> List α -> List α
+| [], m => m
 | _, _ =>  _
 
 -- Test cases
