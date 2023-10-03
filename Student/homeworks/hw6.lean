@@ -188,13 +188,15 @@ type *List α* and returns a result of type *List α,* the
 result of appending the second list to the first. Hint:
 do case analysis on the first argument, and think about
 this function as an analog of natural number addition.
+
+[[Ryland: DONE]]
 -/
 
 -- Here
 
 def concat {α : Type} : List α -> List α -> List α
 | [], m => m
-| _, _ =>  _
+| h1::t1, l2 => h1::concat t1 l2
 
 -- Test cases
 
@@ -208,9 +210,13 @@ def concat {α : Type} : List α -> List α -> List α
 Write a function, *pure'*, that takes a value, *a*, of any
 type α, and that returns a value of type List α containing
 just that one element.
+
+[[Ryland: DONE]]
 -/
 
 -- Here
+def pure' {α : Type} : (a : α) -> List α
+| a => [a]
 
 #eval pure' "Hi"       -- expect ["Hi"]
 
@@ -222,10 +228,18 @@ Define a function, list_rev, that takes a list of values
 of any type and that returns it in reverse order. Hint: you 
 can't use :: with a single value on the right; it needs a
 list on the right. Instead, consider using *concat*.
+
+[[HELP! HELP!]]
 -/
 
 -- Answer here:
+def list_rev {α : Type} : List α -> List α
+| h::t => list_rev t [h]
 
+
+-- Ryland Checks:
+#eval list_rev [4]
+#eval list_rev [1, 2, 3, 4]
 
 /-!
 ## Part 2: Propositional Logic: Syntax and Semantics
