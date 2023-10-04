@@ -310,6 +310,21 @@ use wildcard matching to handle all remaining cases.
 [[HELP! HELP!]]
 -/
 
--- Answer here
 
+-- Answer here
+def ryland_interpretation_0 : var -> Bool
+| var.mk 0 => true
+| var.mk 2 => true
+| _ => false
+
+#eval eval_expr e0 ryland_interpretation_0 -- expect true
+#eval eval_expr e0 ryland_interpretation_0  -- expect true
+
+-- You do the rest
+#eval eval_expr e1 ryland_interpretation_0 -- expect true
+#eval eval_expr e1 ryland_interpretation_0  -- expect true
+#eval eval_expr e2 ryland_interpretation_0 -- expect true
+#eval eval_expr e2 ryland_interpretation_0  -- expect true
+#eval eval_expr e3 ryland_interpretation_0 -- expect true
+#eval eval_expr e3 ryland_interpretation_0  -- expect true
 
