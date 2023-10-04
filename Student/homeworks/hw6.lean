@@ -303,3 +303,4 @@ def list_rev {α : Type} : List α -> List α
 
 Forthcoming as an update to this file.
 -/
+-- FOR GRADER: SEE LECTURE 12 ALSO SUBMITTED TO CANVAS PLZ <3 :)
