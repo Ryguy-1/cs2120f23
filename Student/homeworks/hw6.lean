@@ -1,5 +1,5 @@
 /-!
-# Homework 6
+# Homework 6 (Part 1 -> See Lecture 12 for Part 2)
 ## Ryland Birchmeier
 ## Computing ID: zbp6dw
 

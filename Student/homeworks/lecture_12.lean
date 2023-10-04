@@ -1,5 +1,8 @@
 /-!
 # Propositional Logic: Review and Practice
+## Homework 6 (Part 2)
+## Ryland Birchmeier
+## Computing ID: zbp6dw
 -/
 
 /-!
