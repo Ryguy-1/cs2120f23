@@ -676,15 +676,24 @@ unsatisfiable, otherwise false. The third returns true if *e* is valid, and
 otherwise returns false. You can write helper functions if/as needed. Write
 short comments to explain what each of your functions does. Write a few test
 cases to demonstrate your results.
+
+-- [[Ryland: Done]]
 -/
 
 -- Here
-def is_valid : Expr -> Bool
+
+-- Ryland is_valid Description:
+-- Converts expression to list of boolean interpretation results
+-- checks to ensure EVERY interpretation evaluates to true
+def is_valid : Expr -> Bool 
 | e => has_all_true (truth_table_outputs e)
-where has_all_true : List Bool -> Bool
+where has_all_true : List Bool -> Bool 
 | [] => true
 | h::t => and h (has_all_true t)
 
+-- Ryland is_sat Description:
+-- Converts expression to list of boolean interpretation results
+-- checks to ensure that AT LEAST ONE interpretation evalualtes to true
 def is_sat : Expr -> Bool
 | e => has_any_true (truth_table_outputs e)
 where has_any_true : List Bool -> Bool
@@ -692,9 +701,15 @@ where has_any_true : List Bool -> Bool
 | h::t => or h (has_any_true t)
 
 
+-- Helper method to change all true to false and all false to true in List Bool
 def __list_opposite : List Bool -> List Bool
 | [] => []
 | h::t => (not h)::__list_opposite t 
+
+-- Ryland is_unsat Description:
+-- Converts expression to list of boolean interpretation results
+-- Performs "not" on every interpretation result
+  -- Checks to ensure result of this has all of them as true (all of the original interpretations were false)
 def is_unsat : Expr -> Bool
 | e => has_all_true (__list_opposite (truth_table_outputs e))
 where has_all_true : List Bool -> Bool
