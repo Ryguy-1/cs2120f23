@@ -160,6 +160,7 @@ inductive binary_op : Type
 | and
 | or
 | imp
+| iff                                   -- Ryland: ADDED THIS
 inductive Expr : Type
 | var_exp (v : var)
 | un_exp (op : unary_op) (e : Expr)
@@ -175,10 +176,15 @@ def eval_un_op : unary_op → (Bool → Bool)
 def implies : Bool → Bool → Bool
 | true, false => false
 | _, _ => true
+def biimplies : Bool -> Bool -> Bool    -- Ryland: ADDED THIS
+| true, true => true
+| false, false => true
+| _, _ => false
 def eval_bin_op : binary_op → (Bool → Bool → Bool)
 | binary_op.and => and
 | binary_op.or => or
 | binary_op.imp => implies
+| binary_op.iff => biimplies            -- Ryland: ADDED THIS
 def Interp := var → Bool  
 def eval_expr : Expr → Interp → Bool 
 | (Expr.var_exp v),        i => i v
@@ -725,7 +731,7 @@ where has_all_true : List Bool -> Bool
 #eval is_valid (X ∨ ¬X)                 -- expect true
 #eval is_valid ((¬(X ∧ Y) ⇒ (¬X ∨ ¬Y))) -- expect true
 #eval is_valid (¬(X ∨ Y) ⇒ (¬X ∧ ¬Y))   -- expect true
-#eval is_valid ((X ∨ Y) ⇒ (X → ¬Y))     -- expect false
+#eval is_valid ((X ∨ Y) ⇒ (X ⇒ ¬Y))     -- expect false
 
 -- Test cases - RYLAND CHECKS
 #eval is_valid ((X ∧ ¬X) ∨ (X ∨ ¬X))    -- expect true
@@ -743,3 +749,24 @@ where has_all_true : List Bool -> Bool
 #eval is_valid ((Y ∧ ¬Y) ∨ (Z ∧ ¬Z))    -- expect false
 #eval is_sat ((Y ∧ ¬Y) ∨ (Z ∧ ¬Z))      -- expect false
 #eval is_unsat ((Y ∧ ¬Y) ∨ (Z ∧ ¬Z))    -- expect true
+
+
+/-
+  Ryland: HOMEWORK 7 PART 2 
+    #5
+
+  [[Ryland: DONE]]
+-/
+
+-- (O ∨ A ∧ B ∨ C) ↔ (A ∧ B ∨ A ∧ C ∨ O ∧ B ∨ O ∧ C)
+def v₀' := var.mk 0
+def v₁' := var.mk 1
+def v₂' := var.mk 2
+def v₃' := var.mk 3
+
+def A := {v₀'}
+def O := {v₁'}
+def B := {v₂'}
+def C := {v₃'}
+
+#eval is_valid ((O ∨ A ∧ B ∨ C) ⇔ (A ∧ B ∨ A ∧ C ∨ O ∧ B ∨ O ∧ C)) -- false
