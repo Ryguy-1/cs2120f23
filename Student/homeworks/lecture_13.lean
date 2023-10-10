@@ -759,8 +759,6 @@ where has_all_true : List Bool -> Bool
 
   [[Ryland: DONE]]
 -/
-
--- (O ∨ A ∧ B ∨ C) ↔ (A ∧ B ∨ A ∧ C ∨ O ∧ B ∨ O ∧ C)
 def v₀' := var.mk 0
 def v₁' := var.mk 1
 def v₂' := var.mk 2
