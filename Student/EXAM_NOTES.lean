@@ -242,3 +242,10 @@ def C := {v₃'}
 
 -- If Need to Evaluate, use Bottom of Lecture 13 (with all other solver code)
 -- #eval valid ((O ∨ A) ∧ (B ∨ C) ⇔ ((A ∧ B) ∨ (A ∧ C) ∨ (O ∧ B) ∨ (O ∧ C))) -- true
+
+
+-------------------------
+def factorial : Nat -> Nat
+| 0 => 1
+| (n' + 1) => (n' + 1) * factorial n'
+#eval factorial 3
