@@ -1,5 +1,7 @@
 /-!
 # Exam 1
+## Ryland Birchmeier
+## Computing ID: zbp6dw
 
 DO NOT CHEAT.
 -/
@@ -111,8 +113,14 @@ here using the notation we've defined.
 
 /-
   Ryland Answer:
+  - Note that I grouped the first half's OR statements together due to
+  the way that the question was phrased. It implies that Orange and Apple
+  should be evaluated first along with Bowl and Cup and then AND those two
+  together. The parenthesis on the second half of the statement are also
+  redundant because AND takes precedence anyways in propositional logic
+  order of operations!
 
-  (O ∨ A ∧ B ∨ C) ⇔ (A ∧ B ∨ A ∧ C ∨ O ∧ B ∨ O ∧ C)
+  ((O ∨ A) ∧ (B ∨ C) ⇔ ((A ∧ B) ∨ (A ∧ C) ∨ (O ∧ B) ∨ (O ∧ C)))
 -/
 
 
@@ -125,4 +133,5 @@ determine that the expression is in fact valid.
 
 [[Ryland: DONE -> THIS IS IN THE LECTURE_13 FILE!!]]
 -/
--- Final Answer: The statement is not valid!
+-- Final Answer (can be seen working in Lecture 13 file v)
+-- #eval valid ((O ∨ A) ∧ (B ∨ C) ⇔ ((A ∧ B) ∨ (A ∧ C) ∨ (O ∧ B) ∨ (O ∧ C))) -- true

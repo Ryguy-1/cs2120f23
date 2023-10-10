@@ -1,6 +1,9 @@
 /-!
 
 # Propositional Logic: A Satisfiability Solver
+## Ryland Birchmeier
+## Computing ID: zbp6dw
+## [HW 7 PART 1 AT END!!!]
 
 You will recall that we say that an expression (formula) in
 propositional logic is *valid* if it evaluates to true under
@@ -160,7 +163,7 @@ inductive binary_op : Type
 | and
 | or
 | imp
-| iff                                   -- Ryland: ADDED THIS
+| iff                                   -- Ryland: ADDED THIS HOMEWORK 7
 inductive Expr : Type
 | var_exp (v : var)
 | un_exp (op : unary_op) (e : Expr)
@@ -176,7 +179,7 @@ def eval_un_op : unary_op → (Bool → Bool)
 def implies : Bool → Bool → Bool
 | true, false => false
 | _, _ => true
-def biimplies : Bool -> Bool -> Bool    -- Ryland: ADDED THIS
+def biimplies : Bool -> Bool -> Bool    -- Ryland: ADDED THIS HOMEWORK 7
 | true, true => true
 | false, false => true
 | _, _ => false
@@ -184,7 +187,7 @@ def eval_bin_op : binary_op → (Bool → Bool → Bool)
 | binary_op.and => and
 | binary_op.or => or
 | binary_op.imp => implies
-| binary_op.iff => biimplies            -- Ryland: ADDED THIS
+| binary_op.iff => biimplies            -- Ryland: ADDED THIS HOMEWORK 7
 def Interp := var → Bool  
 def eval_expr : Expr → Interp → Bool 
 | (Expr.var_exp v),        i => i v
@@ -688,67 +691,66 @@ cases to demonstrate your results.
 
 -- Here
 
--- Ryland is_valid Description:
--- Converts expression to list of boolean interpretation results
--- checks to ensure EVERY interpretation evaluates to true
-def is_valid : Expr -> Bool 
-| e => has_all_true (truth_table_outputs e)
-where has_all_true : List Bool -> Bool 
-| [] => true
-| h::t => and h (has_all_true t)
-
--- Ryland is_sat Description:
+-- Ryland sat Description:
 -- Converts expression to list of boolean interpretation results
 -- checks to ensure that AT LEAST ONE interpretation evalualtes to true
-def is_sat : Expr -> Bool
+def sat : Expr -> Bool
 | e => has_any_true (truth_table_outputs e)
 where has_any_true : List Bool -> Bool
 | [] => false
 | h::t => or h (has_any_true t)
-
 
 -- Helper method to change all true to false and all false to true in List Bool
 def __list_opposite : List Bool -> List Bool
 | [] => []
 | h::t => (not h)::__list_opposite t 
 
--- Ryland is_unsat Description:
+-- Ryland unsat Description:
 -- Converts expression to list of boolean interpretation results
 -- Performs "not" on every interpretation result
   -- Checks to ensure result of this has all of them as true (all of the original interpretations were false)
-def is_unsat : Expr -> Bool
+def unsat : Expr -> Bool
 | e => has_all_true (__list_opposite (truth_table_outputs e))
 where has_all_true : List Bool -> Bool
 | [] => true
 | h::t => and h (has_all_true t)
 
+-- Ryland valid Description:
+-- Converts expression to list of boolean interpretation results
+-- checks to ensure EVERY interpretation evaluates to true
+def valid : Expr -> Bool 
+| e => has_all_true (truth_table_outputs e)
+where has_all_true : List Bool -> Bool 
+| [] => true
+| h::t => and h (has_all_true t)
+
 
 -- A few tests
-#eval is_valid (X)                      -- expect false
-#eval is_sat (X)                        -- exect true
-#eval is_sat (X ∧ ¬X)                   -- expect false
-#eval is_unsat (X ∧ ¬X)                 -- expect true
-#eval is_valid (X ∨ ¬X)                 -- expect true
-#eval is_valid ((¬(X ∧ Y) ⇒ (¬X ∨ ¬Y))) -- expect true
-#eval is_valid (¬(X ∨ Y) ⇒ (¬X ∧ ¬Y))   -- expect true
-#eval is_valid ((X ∨ Y) ⇒ (X ⇒ ¬Y))     -- expect false
+#eval valid (X)                      -- expect false
+#eval sat (X)                        -- exect true
+#eval sat (X ∧ ¬X)                   -- expect false
+#eval unsat (X ∧ ¬X)                 -- expect true
+#eval valid (X ∨ ¬X)                 -- expect true
+#eval valid ((¬(X ∧ Y) ⇒ (¬X ∨ ¬Y))) -- expect true
+#eval valid (¬(X ∨ Y) ⇒ (¬X ∧ ¬Y))   -- expect true
+#eval valid ((X ∨ Y) ⇒ (X ⇒ ¬Y))     -- expect false
 
 -- Test cases - RYLAND CHECKS
-#eval is_valid ((X ∧ ¬X) ∨ (X ∨ ¬X))    -- expect true
-#eval is_sat   ((X ∧ ¬X) ∨ (X ∨ ¬X))    -- expect true
-#eval is_unsat ((X ∧ ¬X) ∨ (X ∨ ¬X))    -- expect false
+#eval valid ((X ∧ ¬X) ∨ (X ∨ ¬X))    -- expect true
+#eval sat   ((X ∧ ¬X) ∨ (X ∨ ¬X))    -- expect true
+#eval unsat ((X ∧ ¬X) ∨ (X ∨ ¬X))    -- expect false
 
-#eval is_valid (X ∨ Y ∨ Z)              -- expect false
-#eval is_sat   (X ∨ Y ∨ Z)              -- expect true
-#eval is_unsat (X ∨ Y ∨ Z)              -- expect false
+#eval valid (X ∨ Y ∨ Z)              -- expect false
+#eval sat   (X ∨ Y ∨ Z)              -- expect true
+#eval unsat (X ∨ Y ∨ Z)              -- expect false
 
-#eval is_valid (Z)                      -- expect false
-#eval is_sat (Z)                        -- expect true
-#eval is_unsat (Z)                      -- expect false
+#eval valid (Z)                      -- expect false
+#eval sat (Z)                        -- expect true
+#eval unsat (Z)                      -- expect false
 
-#eval is_valid ((Y ∧ ¬Y) ∨ (Z ∧ ¬Z))    -- expect false
-#eval is_sat ((Y ∧ ¬Y) ∨ (Z ∧ ¬Z))      -- expect false
-#eval is_unsat ((Y ∧ ¬Y) ∨ (Z ∧ ¬Z))    -- expect true
+#eval valid ((Y ∧ ¬Y) ∨ (Z ∧ ¬Z))    -- expect false
+#eval sat ((Y ∧ ¬Y) ∨ (Z ∧ ¬Z))      -- expect false
+#eval unsat ((Y ∧ ¬Y) ∨ (Z ∧ ¬Z))    -- expect true
 
 
 /-
@@ -769,4 +771,4 @@ def O := {v₁'}
 def B := {v₂'}
 def C := {v₃'}
 
-#eval is_valid ((O ∨ A ∧ B ∨ C) ⇔ (A ∧ B ∨ A ∧ C ∨ O ∧ B ∨ O ∧ C)) -- false
+#eval valid ((O ∨ A) ∧ (B ∨ C) ⇔ ((A ∧ B) ∨ (A ∧ C) ∨ (O ∧ B) ∨ (O ∧ C))) -- true
