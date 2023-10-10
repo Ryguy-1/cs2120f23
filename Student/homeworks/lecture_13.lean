@@ -670,6 +670,7 @@ against what we compute here.
 #reduce truth_table_outputs ((¬(X ∨ Y ) ⇒ (¬X ∧ ¬ Y)))
 #reduce truth_table_outputs (((¬X ∧ ¬ Y) ⇒ ¬(X ∨ Y )))
 
+#reduce truth_table_outputs ((X) ⇔ (Y))
 
 /-!
 ## HOMEWORK PART 1:

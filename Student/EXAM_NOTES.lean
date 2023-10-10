@@ -205,6 +205,7 @@ inductive binary_op : Type
 | and
 | or
 | imp
+| iff                                   -- Ryland: ADDED THIS HOMEWORK 7
 inductive Expr : Type
 | var_exp (v : var)
 | un_exp (op : unary_op) (e : Expr)
@@ -220,25 +221,20 @@ def eval_un_op : unary_op → (Bool → Bool)
 def implies : Bool → Bool → Bool
 | true, false => false
 | _, _ => true
+def biimplies : Bool -> Bool -> Bool    -- Ryland: ADDED THIS HOMEWORK 7
+| true, true => true
+| false, false => true
+| _, _ => false
 def eval_bin_op : binary_op → (Bool → Bool → Bool)
 | binary_op.and => and
 | binary_op.or => or
 | binary_op.imp => implies
+| binary_op.iff => biimplies            -- Ryland: ADDED THIS HOMEWORK 7
 def Interp := var → Bool  
 def eval_expr : Expr → Interp → Bool 
 | (Expr.var_exp v),        i => i v
 | (Expr.un_exp op e),      i => (eval_un_op op) (eval_expr e i)
 | (Expr.bin_exp op e1 e2), i => (eval_bin_op op) (eval_expr e1 i) (eval_expr e2 i)
-
-def v₀' := var.mk 0
-def v₁' := var.mk 1
-def v₂' := var.mk 2
-def v₃' := var.mk 3
-
-def A := {v₀'}
-def O := {v₁'}
-def B := {v₂'}
-def C := {v₃'}
 
 -- If Need to Evaluate, use Bottom of Lecture 13 (with all other solver code)
 -- #eval valid ((O ∨ A) ∧ (B ∨ C) ⇔ ((A ∧ B) ∨ (A ∧ C) ∨ (O ∧ B) ∨ (O ∧ C))) -- true
@@ -249,3 +245,41 @@ def factorial : Nat -> Nat
 | 0 => 1
 | (n' + 1) => (n' + 1) * factorial n'
 #eval factorial 3
+
+def list_len {α : Type} : List α -> Nat
+| [] => 0
+| _::t => 1 + list_len t
+#eval list_len [1, 2, 3]
+
+def sum_cubes : List Nat -> Nat
+| [] => 0
+| h::t => h^3 + sum_cubes t
+#eval sum_cubes [1, 2]
+
+def sum_power : List Nat -> Nat -> Nat
+| [], _ => 0
+| h::t, pow => h^pow + sum_power t pow
+#eval sum_power [1, 2] 3
+
+def any_true : List Bool -> Bool
+| [] => false
+| h::t => or h (any_true t)
+#eval any_true [false, false, false]
+#eval any_true [false, true, false]
+
+def every_true : List Bool -> Bool
+| [] => true
+| h::t => and h (any_true t)
+#eval every_true [false, false, false]
+#eval every_true [false, true, false]
+#eval every_true [true, true, true]
+
+def is_even' : Nat -> Bool
+| 0 => true
+| 1 => false
+| (n' + 2) => is_even' n'
+#eval is_even' 7
+
+def is_odd' : Nat -> Bool
+| n => not (is_even' n)
+#eval is_odd' 7
