@@ -23,6 +23,9 @@ def square (n : Nat) := n ^ 2
 def exclaim (s : String) := s ++ "!"
 def is_even (n : Nat) := n % 2 == 0
 
+#eval compose (λ a => a%2==0) String.length "helloooo"
+#eval ((λ a => a%2==0) ∘ String.length) "testd"
+
 def double_after_square := (double ∘ square)
 
 inductive Result : Type
