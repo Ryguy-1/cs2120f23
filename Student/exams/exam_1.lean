@@ -412,3 +412,4 @@ make (X ⇒ ⊥) true?
 -- (Note: must be false because true does not imply false, but false implies false)
 -- Answer: {X is false} is a model of (X ⇒ ⊥)
 -/
+

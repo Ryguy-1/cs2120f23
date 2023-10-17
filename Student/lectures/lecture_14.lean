@@ -1,4 +1,26 @@
+def imp : Bool -> Bool -> Bool
+| true, false => false
+| _, _ => true
+
+-- x = true, y = false
+def x := true
+def y := true
+#eval imp (imp (imp x y) (not x)) (not y) -- true
+def x' := true
+def y' := false
+#eval imp (imp (imp x' y') (not x')) (not y') -- true
+def x'' := false
+def y'' := true
+#eval imp (imp (imp x'' y'') (not x'')) (not y'') -- false
+def x''' := false
+def y''' := false
+#eval imp (imp (imp x''' y''') (not x''')) (not y''') -- true
+
 /-!
+(x → y → ¬x → ¬y)
+-- x implies y implies not x implies not y
+-- true, false => 
+
 # Model Finders and Counterexample Generators
 
 The main topic of this chapter is model and 
@@ -41,7 +63,6 @@ Here's the type of List.map in the Lean libraries.
 #eval List.map (λ n => n + 1) [0,1,2,3,4]
 #eval List.map String.length ["I", "Love", "Logic!"]
 
-
 /-!
 ### List.foldr
 -/
@@ -60,6 +81,7 @@ the identity element (base case value).
 
 #check @List.foldr 
 
+-- Ryland Note: 0 and 1 at the beginning are both base cases!!
 #eval List.foldr Nat.add 0 [1,2,3,4,5]  -- expect 15
 #eval List.foldr Nat.mul 0 [1,2,3,4,5]  -- expect 120, oops!
 #eval List.foldr Nat.mul 1 [1,2,3,4,5]  -- expect 120, ah!
