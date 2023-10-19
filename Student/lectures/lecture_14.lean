@@ -209,6 +209,9 @@ def make_bool_lists: Nat → List (List Bool)
 | n + 1 =>  (List.map (fun L => false::L) (make_bool_lists n)) ++ 
             (List.map (fun L => true::L) (make_bool_lists n))
 
+#eval make_bool_lists 2
+#eval make_bool_lists 3
+
 /-!
 #### Bool List to/from Interpretation Function 
 
@@ -243,11 +246,16 @@ where bools_to_interp_helper : (vars : Nat) → (vals : List Bool) → Interp
     -- override recursively computed interp mapping variable to head bool
     override (bools_to_interp_helper vars t) (var.mk (vars - len)) h 
 
+def interp1 := bool_list_to_interp [true, false, true]
+#reduce interp1 (var.mk 0)
+#reduce interp1 (var.mk 1)
+#reduce interp1 (var.mk 394)
+
 /-!
 To think about: smells like some kind of fold. Iteratively combine
 bool at head of list with given interpretation by overriding at with
 the head value for the *which?* variable
-
+-/
 
 
 /-!
@@ -262,6 +270,8 @@ point being irrelevant to a given expression).
 def interp_to_list_bool : (num_vars : Nat) → Interp →  List Bool
 | 0, _ => []
 | (n' + 1) , i => interp_to_list_bool n' i ++ [(i (var.mk n'))]
+
+#eval interp_to_list_bool 3 interp1
 
 -- From number of variables, list of interpretations, to list of Bool lists
 def interps_to_list_bool_lists : Nat → List Interp → List (List Bool) 
@@ -294,6 +304,7 @@ account for the usual zero-based indexing.
 -/
 
 def num_vars : Expr → Nat := λ e => max_variable_index e + 1                    
+
 
 /-!
 #### From Expression to List of Interpretations
@@ -329,7 +340,6 @@ def truth_table_outputs : Expr → List Bool
 where eval_expr_over_interps : Expr → List Interp → List Bool
 | _, [] => []
 | e, h::t => eval_expr_over_interps e t ++ [eval_expr e h]
-
 
 /-!
 #### n-ary And and Or functions
@@ -377,6 +387,9 @@ value to provide.
 
 def o1 := Option.some true
 def o2 := @Option.none Bool -- need to make type argument explicit
+
+#eval o1
+#eval o2
 
 /-!
 ### Model Finder
@@ -516,6 +529,13 @@ Search for models (returns list of list of bools)
 #eval find_models_bool (¬(X ∧ Y) ⇒ ¬X ∨ ¬Y)          -- all four interps
 #eval find_models_bool ((X ⇒ Y) ⇒ (Y ⇒ Z) ⇒ (X ⇒ Z)) -- all eight interps
 
+
+-- Ryland Notes: Useful Functions
+-- find_counterexamples Expr
+-- find_counterexamples_bool Expr    <-- Bools
+-- find_models_bool Expr             <-- Bools
+-- find_models Expr
+-- count_models Expr                 <-- Nat (Count)
 
 /-!
 ## Homework
