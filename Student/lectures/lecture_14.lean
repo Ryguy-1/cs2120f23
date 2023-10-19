@@ -335,11 +335,21 @@ Boolean values.
 -/ 
 
 -- The column of truth table outputs for e
-def truth_table_outputs : Expr → List Bool
+def truth_table_outputs' : Expr → List Bool
 | e =>  eval_expr_over_interps e (mk_interps_vars (num_vars e))
 where eval_expr_over_interps : Expr → List Interp → List Bool
 | _, [] => []
 | e, h::t => eval_expr_over_interps e t ++ [eval_expr e h]
+
+def truth_table_outputs : Expr → List Bool
+| e =>  List.map (fun i => eval_expr e i) (mk_interps_vars (num_vars e)) -- can also swap lambda for "(eval_expr e)"
+
+def X := {var.mk 0}
+def Y := {var.mk 1}
+def Z := {var.mk 2}
+#eval truth_table_outputs (X ∧ Y)
+#eval List.foldr or false (truth_table_outputs (X ∧ Y)) -- IS satisfiable
+#eval List.foldr and true (truth_table_outputs (X ∧ Y)) -- is NOT valid
 
 /-!
 #### n-ary And and Or functions
@@ -359,7 +369,7 @@ properties: for being satisfiable, valid, or unsatisfiable.
 
 def is_sat (e : Expr) : Bool := reduce_or (truth_table_outputs e)
 def is_valid (e : Expr) : Bool := reduce_and (truth_table_outputs e)
-def is_unsat (e : Expr) : Bool := not (is_sat e)
+def is_unsat (e : Expr) : Bool := not (is_sat e) -- Exercise: is it the same as "is_sat ¬e" ??
 
 
 /-!
@@ -461,7 +471,7 @@ find such models using our model finder. Defining a counter-example
 finder is thus trivial. 
 -/
 
-def find_counterexamples (e : Expr) := find_models (¬e)
+def find_counterexamples (e : Expr) := find_models (¬e) --just the opposite of models for e
 
 def find_counterexamples_bool : Expr → List (List Bool)
 | e =>  interps_to_list_bool_lists (num_vars e) (find_counterexamples e)
@@ -471,9 +481,10 @@ def find_counterexamples_bool : Expr → List (List Bool)
 ## Tests and Demonstrations
 -/
 
-def X := {var.mk 0}
-def Y := {var.mk 1}
-def Z := {var.mk 2}
+-- Ryland: Defined Earlier
+-- def X := {var.mk 0}
+-- def Y := {var.mk 1}
+-- def Z := {var.mk 2}
 
 /-!
 Is it true that if X being true makes Y true, then does X being 
