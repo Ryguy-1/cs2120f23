@@ -5,7 +5,7 @@ from z3 import *
 
 X = Bool("X")
 Y = Bool("Y")
-Z = Bool("Y")
+Z = Bool("Z")
 
 # Propositional logic expressions
 # Iff is represented by equality ==
