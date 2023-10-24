@@ -59,6 +59,14 @@ solve(Implies(X, Y), Or(Not(X), Z), Z == Not(Y))
 print("Unsatisfiability of negation, ~(X \/ ~X), means (X \/ ~X) is valid.")
 solve(Not(Or(X, Not(X))))
 
+print(f"------------- DEMORGAN PROVE VALID --------------")
+p, q = Bools('p q')
+demorgan = And(p, q) == Not(Or(Not(p), Not(q)))
+solve(Not(demorgan))
+
+class_one = Implies(Implies(p, q), Implies(Not(p), Not(q)))
+solve(Not(class_one))
+
 # Simplification
 
 print("Simplify X and Y and X")
