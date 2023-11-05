@@ -228,7 +228,7 @@ match proof_of_aornota with
 I spent about an hour trying to figure out
 how to do a couple things:
   1) What to match to start off (proof_of_aornota)
-  2) How to complete this line: Or.inl b =>
+  2) How to complete this line: Or.inl b => _
 and GPT-4 gave me hints as to how to continue
 which I found really helpful.
 
