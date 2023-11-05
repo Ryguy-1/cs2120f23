@@ -1,4 +1,14 @@
 /-!
+# Homework 9
+## Ryland Birchmeier
+## Computing ID: zbp6dw
+-/
+
+/-!
+# Copied from lecture_17.lean
+## NOTE: Homework Solution at Bottom!
+-/
+/-!
 # Examples and Excluded Middle
 -/
 
@@ -198,10 +208,30 @@ it's just a matter of showing that the proposition is true in each
 of the four resulting cases.
 
 HOMEWORK: Complete this proof.
+
+-- Ryland: Done!!
 -/
 
 example (A B : Prop) : ¬(A ∧ B) -> ¬A ∨ ¬B :=
 λ nab =>
-let proof_of_aornota := em A
-let proof_of_bornotb := em B
-_
+let (proof_of_aornota : A ∨ ¬A) := em A
+let (proof_of_bornotb : B ∨ ¬B) := em B
+match proof_of_aornota with
+| Or.inl a =>
+  match proof_of_bornotb with
+  | Or.inl b => False.elim (nab ⟨a, b⟩)
+  | Or.inr nB => Or.inr nB
+| Or.inr nA => Or.inl nA
+
+/-!
+### Syllabus Generative AI Note (Per Section on "Use of Generative AI")
+I spent about an hour trying to figure out
+how to do a couple things:
+  1) What to match to start off (proof_of_aornota)
+  2) How to complete this line: Or.inl b =>
+and GPT-4 gave me hints as to how to continue
+which I found really helpful.
+
+I also used it to help explain to me in what situations you would want
+to use False.elim, and I found it really helpful there as well!
+-/
