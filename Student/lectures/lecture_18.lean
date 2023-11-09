@@ -12,6 +12,8 @@ way to formalize such a proposition using the mod operator.
 
 #check 4 % 2 = 0
 
+-- Ryland: Predicate = Proposition w/ parameters
+
 /-!
 ### Families of Propositions
 
@@ -35,8 +37,11 @@ In Lean and related logics, we represent a predicate as a
 Here's our simple example reformulated.
 -/
 
-def is_even : Nat → Prop := λ n => n % 2 = 0
-
+def is_even : Nat → Prop := λ n => n % 2 = 0 -- is_even is a PREDICATE (takes something and yields a proposition)
+-- Ryland: input = Nat, output = Prop
+#check is_even
+#reduce is_even 4
+#check  is_even 5 -- ok prop, but false
 /-!
 You can see that is_even is a predicate by checking its type.
 Indeed, it's a function from a natural number to a proposition
@@ -128,12 +133,27 @@ def square_pairs : Set (Nat × Nat) := { p : Nat × Nat | square_pair (p.1, p.2)
 def pythagorean_triple : Nat → Nat → Nat → Prop
 | h, x, y => h^2 = x^2 + y^2
 
+def py_trips : Set (Nat × Nat × Nat) := { p : (Nat × Nat × Nat) | pythagorean_triple p.1 p.2.1 p.2.2}
+
+#reduce pythagorean_triple 5 4 3
+#reduce py_trips (5, 4, 3)
+
 /-!
 ### Exercises
 
 - Write a predicate for the property of being an even-length string
 - Write an expression for the set of all even length strings
 -/
+
+def ev_len (s: String) : Prop := is_even (s.length)
+#reduce ev_len "Hello!"
+
+def ev_len_strs : Set String := { s : String | ev_len s}
+#reduce ev_len "Hello"
+
+
+def one_and_two : Set Nat := {n | n = 1 ∨ n = 2}
+#reduce 3 ∈ one_and_two
 
 /-!
 ## Quantifiers
@@ -145,6 +165,15 @@ specified property. The syntax of such propositions is as follows:
 
 - ∀ (x : T), P x
 - ∃ (x : T), P x
+
+-- Every dog is friendly
+-- ∀ (d : Dog), Friendly d
+
+-- Everyone loves everyone
+-- ∀ (p q : Person), Loves p q
+
+-- Everyone loves someone
+-- ∀ (p : Person), ∃ (q : Person), Loves p q
 
 ### Universal Quantification
 
