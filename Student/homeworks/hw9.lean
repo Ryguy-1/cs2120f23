@@ -213,15 +213,15 @@ HOMEWORK: Complete this proof.
 -/
 
 example (A B : Prop) : ¬(A ∧ B) -> ¬A ∨ ¬B :=
-λ nab =>
+λ (nab : ¬(A ∧ B)) =>
 let (proof_of_aornota : A ∨ ¬A) := em A
 let (proof_of_bornotb : B ∨ ¬B) := em B
 match proof_of_aornota with
-| Or.inl a =>
+| Or.inl a => -- if you have proof of a
   match proof_of_bornotb with
-  | Or.inl b => False.elim (nab ⟨a, b⟩)
-  | Or.inr nB => Or.inr nB
-| Or.inr nA => Or.inl nA
+  | Or.inl b => nomatch (nab ⟨a, b⟩) -- [This is impossible by definition!] [you can also do False.elim]!!
+  | Or.inr nB => Or.inr nB -- you must use proof of not b
+| Or.inr nA => Or.inl nA -- you can just use proof of not a
 
 /-!
 ### Syllabus Generative AI Note (Per Section on "Use of Generative AI")
