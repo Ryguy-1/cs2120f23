@@ -1,4 +1,12 @@
 /-!
+# CS 2120 - HW 10
+## Ryland Birchmeier
+## Computing ID: zbp6dw
+-/
+
+/-!
+INSTRUCTIONS FROM ANNOUNCEMENTS:
+
 Reminder: You're to read and understand (or send questions) about the material through the currently posted Lecture 20.
 
 Homework: Due Tuesday before class: Formalize the following logical arguments.
@@ -50,7 +58,8 @@ variable
   (Likes : Dog → Dog → Prop)
 
 #check ∀ (d : Dog), ∀ (g : Dog), ∀ (w : Dog), Likes d g ∧ Likes g w → Likes d w
-#check ∀ (d g w : Dog), Likes d g ∧ Likes g w → Likes d w  -- More concise alternative
+-- More concise alternative
+#check ∀ (d g w : Dog), Likes d g ∧ Likes g w → Likes d w
 end prob2
 
 
@@ -86,18 +95,17 @@ variable
   (Cat : Type)
   (Likes : Cat → Cat → Prop)
 
--- Two ways to write without declaring c and d beforehand
+-- Without declaring c or d beforehand
 #check (∀ (a b : Cat), Likes a b) → ∀ (c d : Cat), Likes c d
-#check ∀ (c d : Cat), (∀ (a b : Cat), Likes a b) → Likes c d
 
 -- Can also declare c and d beforehand
 variable
   (c d : Cat)
 #check (∀ (a b : Cat), Likes a b) → Likes c d
 
--- Proof (Using Variables Defined Within the Statement)
+-- A Proof Example
 example : (∀ (a b : Cat), Likes a b) →
           (∀ (c d : Cat), Likes c d)
-| ⟨_, aLikesB⟩ => _
+| likeAB => fun (c d : Cat) => likeAB c d
 
 end prob5
