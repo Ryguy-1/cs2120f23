@@ -47,7 +47,7 @@ to be the intersection of the odds and the perfect squares.
 -/
 
 -- Here
-def odd_perfects : Set Nat := odds ∩ perfect_squares
+def odd_perfects : Set Nat := {n : Nat | n ∈ odds ∩ perfect_squares}
 
 /-!
 ## Problem #4:
@@ -57,4 +57,6 @@ Hint: A proof within a proof.
 -/
 
 -- Here
-def nine_in_odd_perfects : 9 ∈ odd_perfects := ⟨ rfl, (λ h => h^2=9)⟩
+#reduce 9 ∈ perfect_squares
+example : 9 ∈ perfect_squares := _
+def nine_in_odd_perfects : 9 ∈ odd_perfects := ⟨ rfl, _ ⟩
