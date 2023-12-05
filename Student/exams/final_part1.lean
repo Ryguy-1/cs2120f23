@@ -459,10 +459,18 @@ Notes: (1) fill in the _ holes. (2) you can and will have to
 write separate tactic applications indented on separate lines.
 -/
 
+-- Original:
+-- theorem eq_rel_trans {α : Type} {a b c : α} :
+-- _               -- fill with proposition: equality is transitive
+-- | _, _ => by
+--   _             -- fill in your proof of it here
+
+-- My Solution:
 theorem eq_rel_trans {α : Type} {a b c : α} :
-_               -- fill with proposition: equality is transitive
-| _, _ => by
-  _             -- fill in your proof of it here
+a = b → b = c → a = c
+| a2b, b2c => by
+  rw [a2b]
+  rw [b2c]
 
 /-!
 ## Exam Question #3
