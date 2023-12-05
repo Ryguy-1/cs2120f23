@@ -457,6 +457,8 @@ rewriting goals based on known (or assumed) equalities.
 
 Notes: (1) fill in the _ holes. (2) you can and will have to
 write separate tactic applications indented on separate lines.
+
+[[ Ryland: Done ]]
 -/
 
 -- Original:
@@ -482,6 +484,17 @@ It will specify a set of pairs of natural number values,
 *(a, sa)*, where *sa = Nat.succ a*. Then prove (1) the
 pair, *(2, 3)* is in the relation, and the pair *(2,4)*
 is not.
+
+[[ Ryland: Done ]]
 -/
 
--- Your answer here
+-- Ryland Definition
+inductive suc : Nat → Nat → Prop
+| suc (a b : Nat) : b = Nat.succ a → suc a b
+open suc
+
+-- Ryland Proof 1
+example : suc 2 3 := suc 2 3 rfl
+
+-- Ryland Proof 2
+example : ¬(suc 2 4) := λ h => nomatch h
