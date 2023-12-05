@@ -57,4 +57,4 @@ Hint: A proof within a proof.
 -/
 
 -- Here
-def nine_in_odd_perfects : 9 ∈ odd_perfects := ⟨ rfl, _ ⟩
+def nine_in_odd_perfects : 9 ∈ odd_perfects := ⟨ rfl, (λ h => h^2=9)⟩
