@@ -1,7 +1,8 @@
-import Mathlib.Data.Set.Basic
+-- import Mathlib.Data.Set.Basic
+-- import Mathlib.Logic.Relation
+
 
 /-!
-
 # Set Theory
 
 A set is intuitively understood as a collection of objects.
@@ -416,9 +417,15 @@ reflects this fact, with ∩ in the language of set theory reducing to ∧ in
 the language of predicate logic. The following Lean codeillustrate the point.
 -/
 
+#reduce Set.inter
+-- fun s₁ s₂ a => s₁ a ∧ s₂ a
+
+
+
 variable (α : Type) (s t : Set α)
 #check s ∩ t    -- the intersection of sets is a set
 #reduce s ∩ t   -- its membership predicate is formed using ∧
+
 
 /-!
 As another example, the intersection of our even (ev) and small sets,
@@ -471,15 +478,15 @@ But ah ha! That's not true. We can't construct a proof
 of it, and so we're stuck, with no way to finish our
 proof. Why? The proposition is false!
 
-Exercise: Prove that! 6 ∉ small_set. Here you have to
-recall that 6 ∉ small_set means ¬(6 ∉ small_set), and
-that in turn means that a proof (6 ∉ small_set) leads
+Exercise: Prove that 6 ∉ small_set. Here you have to
+recall that 6 ∉ small_set means ¬(6 ∈ small_set), and
+that in turn means that a proof (6 ∈ small_set) leads
 to a contradiction and so cannot exist. That is, that
-6 ∉ small_set → False.
+6 ∈ small_set → False.
 
 This is again a proof by negation. We'll assume that
 we have a proof of the hypothesis of the implication
-(h : 6 ∉ even_and_small_set), and from that we will
+(h : 6 ∈ even_and_small_set), and from that we will
 derive a proof of False (by case analysis on a proof
 of an impossibility using nomatch) and we'll be done.
 -/
@@ -512,6 +519,11 @@ in s *or* in t. The membership predicate of s ∪ t is thus
 As an example, we now define even_or_small_set as the union
 of the even_set and small_set.
 -/
+
+#reduce @Set.union
+-- fun {α} s₁ s₂ a => s₁ a ∨ s₂ a
+
+
 
 def even_or_small_set := ev_set ∪ small_set
 
@@ -548,9 +560,12 @@ predicates, the complement operation reduces to the negation of
 membership predicates.
 -/
 
+#reduce sᶜ    -- fun x => x ∈ s → False means fun x => x ∉ s
+-- fun x => x ∈ s → False
+
 variable (s : Set Nat)
 #check sᶜ     -- Standard notation for complement of set s
-#reduce sᶜ    -- fun x => x ∈ s → False means fun x => x ∉ s
+
 
 /-!
 Exercises:
@@ -579,9 +594,36 @@ example : 6 ∈ ev_set \ small_set := ⟨ rfl, λ h => nomatch h ⟩
 -/
 
 #reduce @Set.Subset
+-- fun {α} s₁ s₂ => ∀ ⦃a : α⦄, a ∈ s₁ → s₂ a
 
 /-!
 ### Powerset
 -/
 
 #reduce @Set.powerset
+-- fun {α} s t => ∀ ⦃a : α⦄, a ∈ t → s a
+
+
+
+/-!
+## Set Theory and Logical Underpinnings
+
+| Set Theory Concept | Set Theory Definition    | Constructive Logic Reduction (Lean) |
+|--------------------|--------------------------|-------------------------------------|
+| set α              | axioms of set theory     | predicate (α → Prop in Lean)        |
+| s ∩ t              | { a \| a ∈ s ∧ a ∈ t }   | λ a => s a ∧ t a                    |
+| s ∪ t              | { a \| a ∈ s ∨ a ∈ t }   | λ a => s a ∨ t a                    |
+| sᶜ                 | { a \| a ∉ s }           | λ a => s a → False                  |
+| s \ t              | { a \| a ∈ s ∧ a ∉ t }   | λ a => s a ∧ (t a → False)          |
+| s ⊆ t              | ∀ a, a ∈ s → a ∈ t  ...  | λ a => s a → t a ...                |
+| s ⊊ t              | ... ∧ ∃ w, w ∈ t ∧ w ∉ s | ... ∧ ∃ w, (t w) ∧ (s w → False)    |
+| 𝒫 s                | { t \| t ⊆ s }           | λ t => ∀ ⦃a : ℕ⦄, t a → s a         |
+
+In set theory, you have an example of one mathematical abstraction with its own
+objects (sets) and operations (as in the table). Here we  have even more: how set
+theory language reduces to the language of predicate logic in Lean. You should know
+not only the meanings of the abstract operations, such as intersection, but how each
+is defined in terms of predicate logic. You will have to translate back and forth,
+because you have to understand set theory propositions at the logical level level
+to see how to construct proofs of them.
+-/
