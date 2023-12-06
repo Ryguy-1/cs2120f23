@@ -128,7 +128,7 @@ example : ∃ n, square n 4 := Exists.intro 2 (sqr 2 4 rfl)
 English language translation of propostion here:
 
   Proposition: There exists an n of type Nat such that when you square it you get 4.
-  The proof then says that 2 exists and provides a proof that when you square
+  The proof then says that 2 exists and shows that when you square
   it you then get 4 :)
 -/
 
